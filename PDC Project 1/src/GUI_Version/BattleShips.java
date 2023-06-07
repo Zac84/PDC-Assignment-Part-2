@@ -4,9 +4,10 @@
  */
 package GUI_Version;
 
+import pdc.project.pkg1.BFrame;
 import java.io.File;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
+
 
 /**
  *
@@ -16,12 +17,8 @@ public class BattleShips {
 
     public static void main(String[] args) {
         
-        JFrame frame = new JFrame("Battle Ships");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Panel panel = new Panel();
-        frame.add(panel);
-        frame.setSize(800, 800);
-        frame.setVisible(true);
+        BFrame frame = new BFrame();
+
 
     }
 }

@@ -23,13 +23,12 @@ public class Panel extends JPanel implements ActionListener{
     public Panel() {
         //this is like the main method for this class, when you run it does all these things
         //plus its also just the normal constructor
-
+        
         counter = 0;
         button = new JButton("click");
-        ActionListener listener = new MyActionListener();
         button.addActionListener(this);
         
-        label = new JLabel("Bro somehting happening");
+        label = new JLabel("Number of clicks ");
         this.add(label);
         this.add(button);
 
