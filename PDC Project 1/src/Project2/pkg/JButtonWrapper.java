@@ -27,6 +27,14 @@ public class JButtonWrapper {
 
     }
 
+    public void changeEnabledState(boolean enable) {
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                buttons[i][j].setEnabled(enable);
+            }
+        }
+    }
+
     public JButton[][] getButtons() {
         return buttons;
     }

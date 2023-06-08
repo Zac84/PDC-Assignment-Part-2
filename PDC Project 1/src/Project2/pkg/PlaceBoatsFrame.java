@@ -2,23 +2,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package GUI_Version;
-
-import Project2.pkg.GameFrame;
-import java.io.File;
-import javax.swing.JFileChooser;
-
+package Project2.pkg;
 
 /**
  *
  * @author zdtuc
  */
-public class BattleShips {
+import javax.swing.*;
+import java.awt.*;
 
-    public static void main(String[] args) {
+public class PlaceBoatsFrame extends JFrame{
+
+    public PlaceBoatsFrame() {
         
-        GameFrame frame = new GameFrame();
-
-
     }
+    
+    
 }

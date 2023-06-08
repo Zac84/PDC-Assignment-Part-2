@@ -113,17 +113,17 @@ public class BoardManager {
         //adds all the boats to the arrayList, this means that if any future boats were to be added it would still work
         boats.getBoats().add(new Carrier());
 
-        boats.getBoats().add(new BattleShip());
-        boats.getBoats().add(new BattleShip());
-
-        boats.getBoats().add(new Cruiser());
-        boats.getBoats().add(new Cruiser());
-        boats.getBoats().add(new Cruiser());
-
-        boats.getBoats().add(new Submarine());
-        boats.getBoats().add(new Submarine());
-        boats.getBoats().add(new Submarine());
-        boats.getBoats().add(new Submarine());
+//        boats.getBoats().add(new BattleShip());
+//        boats.getBoats().add(new BattleShip());
+//
+//        boats.getBoats().add(new Cruiser());
+//        boats.getBoats().add(new Cruiser());
+//        boats.getBoats().add(new Cruiser());
+//
+//        boats.getBoats().add(new Submarine());
+//        boats.getBoats().add(new Submarine());
+//        boats.getBoats().add(new Submarine());
+//        boats.getBoats().add(new Submarine());
     }
 
     public User getPlayer1() {
@@ -141,8 +141,26 @@ public class BoardManager {
     public void setPlayer2(User Player2) {
         this.Player2 = Player2;
     }
-    
-    
+
+    public void placeBoats(User user) {
+        //make the other place boats private 
+        String TempInput = "";
+
+        //pull up the gui window that has the stuff and use it to input this stuff?
+        //pulls up the gui with the user and then closes it once its finished.
+        
+        
+        boolean placed = false;
+        while (!(TempInput.equalsIgnoreCase("d") && placed)) { //while they haven't finished placing boats and it makes sure they have finished placing boats (placed)
+            System.out.println(user.getUserName() + " Boat Placements: "); //put label into the gui
+            printer.PrintShipPlacementMenu();// print with label 
+            TempInput = IC.check("M D , m d", true); //don't need to do this, just have button that is done but has pop up window if they haven't placed yet.
+            placed = this.placeBoats(user.getID(), TempInput, placed, user);
+        }
+        
+        //close frame
+    }
+
     //returns true if boats have been succesfully placed
     public boolean placeBoats(int ID, String decsion, boolean placed, User user) {
         BoardWrapper tempBoard;
@@ -165,8 +183,8 @@ public class BoardManager {
         switch (decsion) {
             case "M":// m for Manually place
             case "m":
-                if(this.hasBoats(tempBoard)) { // if the board already has boats been placed on it, it it clears the board.
-                   tempBoard.clear(); 
+                if (this.hasBoats(tempBoard)) { // if the board already has boats been placed on it, it it clears the board.
+                    tempBoard.clear();
                 }
                 //see ManuallyPlaceBoats for TODO 
                 m1 = new ManuallyPlaceBoats(boats.getBoats(), tempBoard, user);
@@ -213,8 +231,8 @@ public class BoardManager {
 
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < coloum; j++) {
-                if(tempBoard3.getBoardSpaceString(i, j).equals("O") && !tempBoard2.getBoardSpaceString(i, j).equals("X")){
-                   return false;
+                if (tempBoard3.getBoardSpaceString(i, j).equals("O") && !tempBoard2.getBoardSpaceString(i, j).equals("X")) {
+                    return false;
                 }
             }
         }
@@ -222,18 +240,6 @@ public class BoardManager {
         return won;
     }
 
-    public void placeBoats(User user) {
-        //make the other place boats private 
-        String TempInput = "";
-
-        boolean placed = false;
-        while (!(TempInput.equalsIgnoreCase("d") && placed)) {
-            System.out.println(user.getUserName() + " Boat Placements: ");
-            printer.PrintShipPlacementMenu();
-            TempInput = IC.check("M D , m d", true);
-            placed = this.placeBoats(user.getID(), TempInput, placed, user);
-        }
-    }
 
     public boolean carrierAlive(User user) {
         //returns whether or not the carrier is alive
@@ -253,6 +259,32 @@ public class BoardManager {
         return isAlive;
     }
 
+    public boolean shotAvalible(User user) {
+        //returns if they can use there shot or not
+        BoatListWrapper boats;
+        boats = user == Player1 ? p1Boats : p2Boats;
+
+        Carrier carrier = null;
+        
+        if (!carrierAlive(user)) {
+            return false;
+        }
+
+        for (Boat boat : boats.getBoats()) {
+            if (boat instanceof Carrier) {
+                carrier = (Carrier) boat;
+            }
+        }
+        
+        if (!carrier.largeShotAvalible()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    
+    //CLEANI THIS, USE THE ABOVE METHOD SHOTAVALIBLE AND IT WILL BE SO MUCH BETTER
     public void useShot(int x, int y, User user) {
         //uses the shot from the users board.
 
@@ -320,18 +352,17 @@ public class BoardManager {
 
     //returns true if the board has any boats on it.
     private boolean hasBoats(BoardWrapper board) {
-       boolean hasBoats = false;
-        
+        boolean hasBoats = false;
+
         for (int i = 0; i < board.getRow(); i++) {
             for (int j = 0; j < board.getColoum(); j++) {
-                if(!board.getBoardSpaceString(j, i).equals(board.getFiller())) {
+                if (!board.getBoardSpaceString(j, i).equals(board.getFiller())) {
                     return true;
                 }
             }
         }
-       
-       
-       return hasBoats;
+
+        return hasBoats;
     }
 
 }

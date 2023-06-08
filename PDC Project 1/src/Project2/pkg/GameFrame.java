@@ -23,7 +23,7 @@ import Project2.pkg.BoardWrapper;
  *
  * @author zdtuc
  */
-public class BFrame extends JFrame {
+public class GameFrame extends JFrame {
 
     //the button layout for home grid to display there own ships
     JButtonWrapper PlayerButtonGrid1;
@@ -32,18 +32,22 @@ public class BFrame extends JFrame {
     JButtonWrapper PlayerButtonGrid2;
     BoardWrapper PlayerBoard2;
 
+    private int desiredXPos;
+    private int desiredYPos;
 
     /*
     TODO
     Make everything work with the gui stuff at first without changing any of the actual stuff
     Seperate stuff into classes and make them all that dandy shit
     Add derby support to the login stuff
+    make the actual shooting part of the game work with gui - DONE
+    clean up the shooting part of the gui
      */
     public static void main(String[] args) {
 //        BFrame frame = new BFrame();
     }
 
-    public BFrame(User player1, User player2) {
+    public GameFrame(User player1, User player2) {
 
         //this can be changed sorta thing
         this.PlayerButtonGrid1 = new JButtonWrapper(new JButton[10][10], player1.getID());
@@ -74,9 +78,8 @@ public class BFrame extends JFrame {
         //add stuff to panel
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
-//                buttons[row][col].setActionCommand(row + "_" + col);
-//                buttons[row][col].addActionListener(e -> handleButtonClick(e));
-//                panel.add(buttons[row][col]);
+                this.PlayerButtonGrid2.getButton(j, i).setActionCommand(j + "_" + i);
+                this.PlayerButtonGrid2.getButton(j, i).addActionListener(e -> handleButtonClick(e));
                 boardPanel2.add(PlayerButtonGrid2.getButton(j, i));
             }
         }
@@ -90,21 +93,38 @@ public class BFrame extends JFrame {
         topJPanel.setPreferredSize(new Dimension(800, 400));
         bottomPanel.setPreferredSize(new Dimension(400, 150));
 
+        desiredXPos = -1;
+        desiredYPos = -1;
+        
         this.pack();
         this.setSize(800, 800);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
 
-//
-//        //initialize the button array with buttons
-//        for (int i = 0; i < 10; i++) {
-//            for (int j = 0; j < 10; j++) {
-//                buttons[i][j] = new JButton();
-//                test[i][j] = false;
-//                panel.add(buttons[i][j]);
-//            }
-//        }
-//        this.updateButtons(buttons, new BoardWrapper(10, 10, 1, " "));
+    }
+
+    //a method for getting the current coordinates
+    public int[] getCoordinates() {
+        //this is to stop it from returning the last clicked coordinates
+        if(desiredXPos < 0 || desiredYPos < 0) {
+            return null;
+        }
+        
+        int[] temp = new int[2];
+        temp[0] = desiredXPos;
+        temp[1] = desiredYPos;
+        
+        //this is to stop it from returning the last clicked coordinates
+        desiredXPos = -1;
+        desiredYPos = -1;
+        
+        return temp;
+    }
+
+    //a method for re-enabling all the buttons
+    public void changeEnabledState(boolean state) {
+        this.PlayerButtonGrid1.changeEnabledState(state);
+        this.PlayerButtonGrid2.changeEnabledState(state);
     }
 
     //this should update the buttons if the normal board is changed.
@@ -153,6 +173,16 @@ public class BFrame extends JFrame {
             }
         }
         repaint();
+    }
+
+    public void handleButtonClick(ActionEvent e) {
+        String actionCommand = e.getActionCommand();
+        String[] coordinates = actionCommand.split("_");
+        this.desiredXPos = Integer.parseInt(coordinates[0]);
+        this.desiredYPos = Integer.parseInt(coordinates[1]);
+        this.PlayerButtonGrid1.changeEnabledState(false);
+        this.PlayerButtonGrid2.changeEnabledState(false);
+        System.out.println("Button clicked pos: " + this.desiredXPos + " " + this.desiredYPos);
     }
 
 //    @Override

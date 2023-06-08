@@ -39,7 +39,7 @@ public class BattleShips {
         TempInput = IC.check("L C , l c", true);
         Board.fillUsers(Board.Player2, TempInput);
 
-        BFrame frame = new BFrame(Board.getPlayer1(), Board.getPlayer2());
+//        BFrame frame = new BFrame(Board.getPlayer1(), Board.getPlayer2());
 
         //Board manager place boats
         //see board manager placeBoats for TODO
@@ -54,8 +54,8 @@ public class BattleShips {
                 + "\nM are misses\n\n");
 
         //starts up the gui window
-//        BFrame frame = new BFrame(Board.getPlayer1(), Board.getPlayer2());
-        String[] desiredPos;
+        GameFrame frame = new GameFrame(Board.getPlayer1(), Board.getPlayer2());
+        int[] desiredPos = null;
 
         //temp References
         BoardWrapper tempPlayer1Board;
@@ -84,26 +84,43 @@ public class BattleShips {
             printer.printDoubleBoard(tempPlayer1Board, tempPlayer1Board2, player1.getUserName(), player2.getUserName());
             printer.shootingScreen(player1.getUserName());
 
-            //this needs to be chaned to something like GuiClass.Getcourdinates or something.
             frame.updateButtons(tempPlayer1Board, tempPlayer1Board2);
-            desiredPos = IC.checkCoordinates().split(" ");
+            frame.changeEnabledState(true);
 
-            //the coursidnates are then processed for this stuff
-            int desiredXPos = (Integer.parseInt(desiredPos[0]) - 1);
-            int desiredYPos = (Integer.parseInt(desiredPos[1]) - 1);
+            //this needs to be chaned to something like GuiClass.Getcourdinates or something.
+            while (desiredPos == null) {
+                desiredPos = frame.getCoordinates();
+                //stops it from continuing until courdinates are found.
+            }
 
+
+            int desiredXPos = desiredPos[0];
+            int desiredYPos = desiredPos[1];
+
+            System.out.println("desired pos: " + desiredXPos + ", " + desiredYPos);
+            
             //this normal stuff can happen and then it needs to be relayed to the gui
+            
+            //only display the gui element for the boom if its avalible.
+            if(!Board.shotAvalible(player1)) {
+                //if shot isn't avalible, dont show the button
+                //implement
+            }
+                
+                 
             if (desiredPos.length == 3) {
                 Board.useShot(desiredXPos, desiredYPos, player1);
             } else {
                 if (tempPlayer2Board.getBoardSpaceString(desiredXPos, desiredYPos).equals(tempPlayer2Board.getFiller())) { //miss
                     tempPlayer1Board2.setSpace(desiredXPos, desiredYPos, "M"); // sets shooting board space to M for miss
-                    System.out.println("tempPlayer1Board2 at " + desiredXPos + ", " + desiredYPos + tempPlayer1Board2.getBoardSpaceString(desiredXPos, desiredYPos));
                 } else if (tempPlayer2Board.getBoardSpaceString(desiredXPos, desiredYPos).equals("O")) { //HIT
                     tempPlayer1Board2.setSpace(desiredXPos, desiredYPos, "X"); // Sets X on both player 1s shooting screen and player 2's board
                     tempPlayer2Board.setSpace(desiredXPos, desiredYPos, "X");
                 }
             }
+
+            //reset desiredPos so that it doesn't break
+            desiredPos = null;
 
             //should update the gui afterwards
             //should pass in the tempPlayer1Board for printing there there own board
