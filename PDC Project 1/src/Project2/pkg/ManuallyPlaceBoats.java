@@ -47,20 +47,16 @@ public class ManuallyPlaceBoats {
 
         for (Boat boat : Boats) {
             
-            //updates the board / shows the board with the current stuff on it, for GUI it should just be like a GuiClass.UpdateBoard;
             printer.printBoard(board.getBoard(), board.getRow(), board.getColoum());
-            //should be done within the gui, could be a method like guiClass.changeSomeLabel(boat.getName(), boat.getInitialSize()); 
-            System.out.println("Please place you boat: " + boat.getName() + " Which is " + boat.getInitialSize() + " Long");
-            System.out.println("Orientation: (N E S W): ");
+
+            frame.setLabels(user.getUserName(), boat.getName(), boat.getInitialSize() + "");
+
+
             //this needs to be an input box of somesort that could be done with a GuiClass.getOrientation
             desiredOrientation = IC.check("N E S W , n e s w", true);
-            System.out.println("Location: (x y): ");
-            //this also needs to be an input box of someSort that could be done with GuiClass.getCourdinates();
-            //the stuff from input checker should be implemented into the gui class.
-            
             //get the coordinates like the shooting thing - see battleships main method
             desiredPos = IC.checkCoordinates().split(" ");
-            //do normal stuff
+            
             
             boolean correctPos = false;
 

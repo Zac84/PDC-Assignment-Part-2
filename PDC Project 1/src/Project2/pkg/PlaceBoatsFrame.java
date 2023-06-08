@@ -15,6 +15,10 @@ public class PlaceBoatsFrame extends JFrame {
 
     JButton[][] buttonGrid;
     BoardWrapper Board;
+    JLabel[] labels;
+    private JTextField orientation;
+    private JTextField coordinates;
+    private String orientationAndCoordinates;
 
     public static void main(String[] args) {
         PlaceBoatsFrame frame = new PlaceBoatsFrame();
@@ -55,7 +59,7 @@ public class PlaceBoatsFrame extends JFrame {
         leftJPanel.setBackground(Color.green);
         mainJPanel.add(leftJPanel, BorderLayout.WEST);
         //TODO needs to be filled with pictures of numbers hopefully or labels
-        for (int i = 0; i < 10; i++) {
+        for (int i = 1; i < 11; i++) {
             leftJPanel.add(new JLabel(i + "", SwingConstants.CENTER));
         }
 
@@ -75,29 +79,66 @@ public class PlaceBoatsFrame extends JFrame {
         JPanel bottomJPanel = new JPanel();
         mainJPanel.add(bottomJPanel, BorderLayout.SOUTH);
         bottomJPanel.setLayout(null);
-        
+
         JButton intructions = new JButton();
         intructions.addActionListener(e -> {
             this.intructionsMessage();
         });
-        
+
         intructions.setBounds(375, 35, 150, 40);
         intructions.setText("Instructions");
         intructions.setBackground(new Color(90, 163, 78));
         intructions.setForeground(Color.WHITE);
         intructions.setFocusable(false);
         bottomJPanel.add(intructions);
+
+        labels = new JLabel[3];
+        labels[0] = new JLabel("Player: ");
+        labels[1] = new JLabel("Boat Name: ");
+        labels[2] = new JLabel("Boat Length: ");
+
+        labels[0].setBounds(50, 25, 200, 25);
+        labels[1].setBounds(50, 50, 200, 25);
+        labels[2].setBounds(50, 75, 200, 25);
+
+        bottomJPanel.add(labels[0]);
+        bottomJPanel.add(labels[1]);
+        bottomJPanel.add(labels[2]);
+
+        orientation = new JTextField(1);
+        coordinates = new JTextField(3);
+        orientation.setBounds(50, 120, 50, 30);
+        coordinates.setBounds(110, 120, 100, 30);
+
+        bottomJPanel.add(orientation);
+        bottomJPanel.add(coordinates);
+
+        JButton place = new JButton();
+        place.setBounds(220, 120, 100, 30);
+        place.setBackground(Color.white);
+        place.setFocusable(false);
+        place.setText("PLACE");
+        place.addActionListener(e -> {
+            if (checkFields()) {
+                this.takeTextFields();
+            } else {
+                this.showPopUpMessage("Incorrect", "Please make sure you input the correct fields");
+            }
+        });
+        bottomJPanel.add(place);
+
         /*
         TODO
-        Needs a button for instructions that opens pop up
+        Needs a button for instructions that opens pop up DONE
+        A label with the current Player name
         A label with the current boat name
         A label with current boat length
+        A method that updates all the labels
         A text input box with orientaion
         A text input box with coordinates
         A button to place, which deletes the stuff for the text box's and put the ships on the board, should also make sure that the coordinates are correct
         A button for done which should just set that value to d
          */
-
         topJPanel.setPreferredSize(new Dimension(750, 50));
         leftJPanel.setPreferredSize(new Dimension(50, 600));
         bottomJPanel.setPreferredSize(new Dimension(575, 200));
@@ -109,6 +150,62 @@ public class PlaceBoatsFrame extends JFrame {
         this.setSize(575, 800);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
+    }
+
+    public boolean checkFields() {
+        boolean temp = true;
+        
+        if (!this.correctCharacters(this.orientation.getText(), "n e s w")){
+            this.orientation.setText("");
+            temp = false;
+        }
+        
+        if(!this.checkCoordinates(this.coordinates.getText())) {
+            this.coordinates.setText("");
+            temp = false;
+        }
+        
+        return temp;
+    }
+
+    public boolean checkCoordinates(String input) {
+        String[] coordinates = input.split(" ");
+        
+        
+        if(!coordinates[0].matches("[a-jA-J]")) {
+            return false;
+        }
+        
+        
+        if(!coordinates[1].matches("[1-9]|10")) {
+            return false;
+        }
+        return true;
+    }
+    
+    //should be in another class but here for now
+    public boolean correctCharacters (String input, String correctCharacters) {
+        String[] chars = correctCharacters.split(" ");
+        
+        if(input.length() != chars[0].length()) { //if the length of the input isn't the same as the desired lenght
+            return false; //return false
+        }
+        
+        if(!correctCharacters.toUpperCase().contains(input.toUpperCase())){
+            return false;
+        }
+        
+        return true;
+    }
+    
+    public void takeTextFields() {
+        String input1 = orientation.getText();
+        String input2 = coordinates.getText();
+        this.orientationAndCoordinates = input1 + " " + input2;
+
+        orientation.setText("");
+        coordinates.setText("");
+        System.out.println(this.orientationAndCoordinates);
     }
 
     public void showPopUpMessage(String title, String message) {
@@ -138,6 +235,12 @@ public class PlaceBoatsFrame extends JFrame {
 
     public void setBoard(BoardWrapper board) {
         this.Board = board;
+    }
+
+    public void setLabels(String player, String boatName, String boatLength) {
+        this.labels[0].setText("Player: " + player);
+        this.labels[1].setText("Boat Name: " + boatName);
+        this.labels[2].setText("Boat Length: " + boatLength);
     }
 
 }

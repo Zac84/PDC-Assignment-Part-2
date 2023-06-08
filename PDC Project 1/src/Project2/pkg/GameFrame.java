@@ -27,10 +27,10 @@ public class GameFrame extends JFrame {
 
     //the button layout for home grid to display there own ships
     JButtonWrapper PlayerButtonGrid1;
-    BoardWrapper PlayerBoard1;
+
     //the button board for the attacking grid to actually press buttons and stuff.
     JButtonWrapper PlayerButtonGrid2;
-    BoardWrapper PlayerBoard2;
+
 
     private int desiredXPos;
     private int desiredYPos;

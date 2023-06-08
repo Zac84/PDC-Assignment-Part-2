@@ -144,33 +144,22 @@ public class BoardManager {
 
     public void placeBoats(User user) {
         //make the other place boats private 
-        String TempInput = "";
 
         //pull up the gui window that has the stuff and use it to input this stuff?
         //pulls up the gui with the user and then closes it once its finished.
-        
         PlaceBoatsFrame frame = new PlaceBoatsFrame();
-        
-        boolean placed = false;
-        while (!(TempInput.equalsIgnoreCase("d") && placed)) { //while they haven't finished placing boats and it makes sure they have finished placing boats (placed)
-            System.out.println(user.getUserName() + " Boat Placements: "); //put label into the gui
-            printer.PrintShipPlacementMenu();// print with label 
-            TempInput = IC.check("M D , m d", true); //don't need to do this, just have button that is done but has pop up window if they haven't placed yet.
-            placed = this.placeBoats(user.getID(), TempInput, placed, user, frame);
-        }
-        
+        this.placeBoats(user.getID(), user, frame);
         frame.dispose();
-        
+
         //close frame
     }
 
     //returns true if boats have been succesfully placed
-    public boolean placeBoats(int ID, String decsion, boolean placed, User user, PlaceBoatsFrame frame) {
+    public void placeBoats(int ID, User user, PlaceBoatsFrame frame) {
         BoardWrapper tempBoard;
         BoardWrapper tempBoard3;
         BoatListWrapper boats;
-        
-        
+
         //the user is directly inputted this can be cleaned up
         if (Player1Board.getPlayerID() == ID) { //sets tempboard to the reference to the users board
             tempBoard = Player1Board;
@@ -181,47 +170,26 @@ public class BoardManager {
             tempBoard3 = Player2Board3;
             boats = p2Boats;
         }
-        
+
         frame.setBoard(tempBoard);
         //put frame in here and then only close when d is inputted.
         //will have to pass the frame into the manually place boats thing
-        System.out.println("This got gone over twice");
-        
-        //TODO: Change into gui components
-        //changes the users board;
-        switch (decsion) {
-            case "M":// m for Manually place
-            case "m":
-                if (this.hasBoats(tempBoard)) { // if the board already has boats been placed on it, it it clears the board.
-                    tempBoard.clear();
-                }
-                //see ManuallyPlaceBoats for TODO 
-                //sends a frame so that, opening and closing can be controlled in here
-                m1 = new ManuallyPlaceBoats(boats.getBoats(), tempBoard, user, frame);
-                m1.placeBoats();
-                placed = true;
-                break;
-            case "d":// done
-            case "D":
-                if (!placed) {
-                    //needs to be a message box gui typa thing or something
-                    System.out.println("Please place ships first :)");
-                } else {
-                    for (int i = 0; i < tempBoard3.getRow(); i++) {
-                        for (int j = 0; j < tempBoard3.getColoum(); j++) {
-                            tempBoard3.setSpace(i, j, tempBoard.getBoardSpaceString(i, j));
-                        }
-                    }
-                }
-                break;
-            default:
-                break;
-        }
 
-        if (!placed) {
-            System.out.println("Please place ships first :)");
+
+        //reset the board
+        //if you want you can add a reset button that just calls this
+        //tempBoard.clear();
+
+        //sends a frame so that, opening and closing can be controlled in here
+        m1 = new ManuallyPlaceBoats(boats.getBoats(), tempBoard, user, frame);
+        m1.placeBoats();
+
+        //copys it into board 3
+        for (int i = 0; i < tempBoard3.getRow(); i++) {
+            for (int j = 0; j < tempBoard3.getColoum(); j++) {
+                tempBoard3.setSpace(i, j, tempBoard.getBoardSpaceString(i, j));
+            }
         }
-        return placed;
     }
 
     //checks if this ID has won
@@ -250,7 +218,6 @@ public class BoardManager {
         return won;
     }
 
-
     public boolean carrierAlive(User user) {
         //returns whether or not the carrier is alive
         boolean isAlive = false;
@@ -275,7 +242,7 @@ public class BoardManager {
         boats = user == Player1 ? p1Boats : p2Boats;
 
         Carrier carrier = null;
-        
+
         if (!carrierAlive(user)) {
             return false;
         }
@@ -285,7 +252,7 @@ public class BoardManager {
                 carrier = (Carrier) boat;
             }
         }
-        
+
         if (!carrier.largeShotAvalible()) {
             return false;
         }
@@ -293,7 +260,6 @@ public class BoardManager {
         return true;
     }
 
-    
     //CLEANI THIS, USE THE ABOVE METHOD SHOTAVALIBLE AND IT WILL BE SO MUCH BETTER
     public void useShot(int x, int y, User user) {
         //uses the shot from the users board.
