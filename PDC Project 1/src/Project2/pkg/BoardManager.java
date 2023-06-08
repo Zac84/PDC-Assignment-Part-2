@@ -149,24 +149,28 @@ public class BoardManager {
         //pull up the gui window that has the stuff and use it to input this stuff?
         //pulls up the gui with the user and then closes it once its finished.
         
+        PlaceBoatsFrame frame = new PlaceBoatsFrame();
         
         boolean placed = false;
         while (!(TempInput.equalsIgnoreCase("d") && placed)) { //while they haven't finished placing boats and it makes sure they have finished placing boats (placed)
             System.out.println(user.getUserName() + " Boat Placements: "); //put label into the gui
             printer.PrintShipPlacementMenu();// print with label 
             TempInput = IC.check("M D , m d", true); //don't need to do this, just have button that is done but has pop up window if they haven't placed yet.
-            placed = this.placeBoats(user.getID(), TempInput, placed, user);
+            placed = this.placeBoats(user.getID(), TempInput, placed, user, frame);
         }
+        
+        frame.dispose();
         
         //close frame
     }
 
     //returns true if boats have been succesfully placed
-    public boolean placeBoats(int ID, String decsion, boolean placed, User user) {
+    public boolean placeBoats(int ID, String decsion, boolean placed, User user, PlaceBoatsFrame frame) {
         BoardWrapper tempBoard;
         BoardWrapper tempBoard3;
         BoatListWrapper boats;
-
+        
+        
         //the user is directly inputted this can be cleaned up
         if (Player1Board.getPlayerID() == ID) { //sets tempboard to the reference to the users board
             tempBoard = Player1Board;
@@ -177,7 +181,12 @@ public class BoardManager {
             tempBoard3 = Player2Board3;
             boats = p2Boats;
         }
-
+        
+        frame.setBoard(tempBoard);
+        //put frame in here and then only close when d is inputted.
+        //will have to pass the frame into the manually place boats thing
+        System.out.println("This got gone over twice");
+        
         //TODO: Change into gui components
         //changes the users board;
         switch (decsion) {
@@ -187,7 +196,8 @@ public class BoardManager {
                     tempBoard.clear();
                 }
                 //see ManuallyPlaceBoats for TODO 
-                m1 = new ManuallyPlaceBoats(boats.getBoats(), tempBoard, user);
+                //sends a frame so that, opening and closing can be controlled in here
+                m1 = new ManuallyPlaceBoats(boats.getBoats(), tempBoard, user, frame);
                 m1.placeBoats();
                 placed = true;
                 break;

@@ -20,26 +20,29 @@ public class ManuallyPlaceBoats {
     PrinterClass printer = new PrinterClass();
     Colisions colisions = new Colisions();
     User user;
+    
+    PlaceBoatsFrame frame;
 
     //inputs the arraylist of boats so that for every player you can make another.
-    public ManuallyPlaceBoats(ArrayList boats, BoardWrapper board, User user) {
+    public ManuallyPlaceBoats(ArrayList boats, BoardWrapper board, User user, PlaceBoatsFrame frame) {
         this.Boats = boats;
         this.board = board;
         this.user = user;
+        this.frame = frame;
         //maybe something like a place boats state in the gui
     }
 
-    public BoardWrapper placeBoats() {
+    public void placeBoats() {
 
         InputChecker IC = new InputChecker();
-
+        
         String desiredOrientation = "";
         String[] desiredPos;
 
         //needs to be GUI labels 
         //could be GUI class method that is something like manuallyPlaceBoats and has these in the labels
-        System.out.println("To place a boat, select a orientation (N, E, S, W), this is the direction the boat will face");
-        System.out.println(" and pick the coridinates x,y in the form (letter number)");
+//        System.out.println("To place a boat, select a orientation (N, E, S, W), this is the direction the boat will face");
+//        System.out.println(" and pick the coridinates x,y in the form (letter number)");
         
 
         for (Boat boat : Boats) {
@@ -54,8 +57,11 @@ public class ManuallyPlaceBoats {
             System.out.println("Location: (x y): ");
             //this also needs to be an input box of someSort that could be done with GuiClass.getCourdinates();
             //the stuff from input checker should be implemented into the gui class.
+            
+            //get the coordinates like the shooting thing - see battleships main method
             desiredPos = IC.checkCoordinates().split(" ");
-
+            //do normal stuff
+            
             boolean correctPos = false;
 
             while (!correctPos) {
@@ -69,11 +75,15 @@ public class ManuallyPlaceBoats {
                     boat.setOrientaion(desiredOrientation);
                     //draw onto board
                     this.drawOntoBoard(boat);
+                    //updated the board here
+                    frame.updateButtons();
                     correctPos = true;
                 } else {
                     //on the last one, it breaks and goes through anyway
                     //needs to be a text box thing in the GUI like GuiClass.sendTextBox("HFJHAHFSAUH");
+                    frame.showPopUpMessage("", "Please make sure boat doesn't go out of boundys and has a 1 pixel radius of free space");
                     System.out.println("Please make sure boat doesn't go out of boundys and has a 1 pixel radius of free space");
+                    
                     //needs to be guied
                     desiredPos = IC.checkCoordinates().split(" ");
                 }
@@ -82,8 +92,6 @@ public class ManuallyPlaceBoats {
         //prints the board once done
         //should update the gui so that the board is printed iwth 
 //        printer.printBoard(board.getBoard(), board.getRow(), board.getColoum());
-
-        return board;
     }
 
     public void drawOntoBoard(Boat boat) {
