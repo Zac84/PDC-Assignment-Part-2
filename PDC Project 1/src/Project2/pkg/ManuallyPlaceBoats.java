@@ -6,6 +6,7 @@ package Project2.pkg;
 
 import com.sun.xml.internal.bind.v2.runtime.output.SAXOutput;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 /**
@@ -20,7 +21,8 @@ public class ManuallyPlaceBoats {
     PrinterClass printer = new PrinterClass();
     Colisions colisions = new Colisions();
     User user;
-    
+    HashMap<String, String> map = new HashMap<String, String>();
+
     PlaceBoatsFrame frame;
 
     //inputs the arraylist of boats so that for every player you can make another.
@@ -29,13 +31,25 @@ public class ManuallyPlaceBoats {
         this.board = board;
         this.user = user;
         this.frame = frame;
-        //maybe something like a place boats state in the gui
+
+        map.put("A", "1");
+        map.put("B", "2");
+        map.put("C", "3");
+        map.put("D", "4");
+        map.put("E", "5");
+        map.put("F", "6");
+        map.put("G", "7");
+        map.put("H", "8");
+        map.put("I", "9");
+        map.put("J", "10");
     }
 
     public void placeBoats() {
 
         InputChecker IC = new InputChecker();
-        
+
+        String[] placement = null;
+        String gotCoords = null;
         String desiredOrientation = "";
         String[] desiredPos;
 
@@ -43,26 +57,29 @@ public class ManuallyPlaceBoats {
         //could be GUI class method that is something like manuallyPlaceBoats and has these in the labels
 //        System.out.println("To place a boat, select a orientation (N, E, S, W), this is the direction the boat will face");
 //        System.out.println(" and pick the coridinates x,y in the form (letter number)");
-        
-
         for (Boat boat : Boats) {
-            
+
             printer.printBoard(board.getBoard(), board.getRow(), board.getColoum());
 
             frame.setLabels(user.getUserName(), boat.getName(), boat.getInitialSize() + "");
 
-
             //this needs to be an input box of somesort that could be done with a GuiClass.getOrientation
-            desiredOrientation = IC.check("N E S W , n e s w", true);
-            //get the coordinates like the shooting thing - see battleships main method
-            desiredPos = IC.checkCoordinates().split(" ");
-            
-            
+//            desiredOrientation = IC.check("N E S W , n e s w", true);
+//            //get the coordinates like the shooting thing - see battleships main method
+//            desiredPos = IC.checkCoordinates().split(" ");
+            while (gotCoords == null) {
+                gotCoords = frame.getCoordinates();
+            }
+            placement = gotCoords.split(" ");
+
+            System.out.println("got out");
+            desiredOrientation = placement[0];
+
             boolean correctPos = false;
 
             while (!correctPos) {
-                int desiredXPos = (Integer.parseInt(desiredPos[0]) - 1);
-                int desiredYPos = (Integer.parseInt(desiredPos[1]) - 1);
+                int desiredXPos = (Integer.parseInt(map.get(placement[1].toUpperCase())) - 1);
+                int desiredYPos = (Integer.parseInt(placement[2]) - 1);
 
                 colisions.setNewInfo(board, desiredOrientation, desiredXPos, desiredYPos, boat.getInitialSize());
                 if (colisions.doesntColideWith()) {
@@ -73,17 +90,19 @@ public class ManuallyPlaceBoats {
                     this.drawOntoBoard(boat);
                     //updated the board here
                     frame.updateButtons();
+                    placement = null;
                     correctPos = true;
                 } else {
                     //on the last one, it breaks and goes through anyway
                     //needs to be a text box thing in the GUI like GuiClass.sendTextBox("HFJHAHFSAUH");
                     frame.showPopUpMessage("", "Please make sure boat doesn't go out of boundys and has a 1 pixel radius of free space");
                     System.out.println("Please make sure boat doesn't go out of boundys and has a 1 pixel radius of free space");
-                    
+
                     //needs to be guied
                     desiredPos = IC.checkCoordinates().split(" ");
                 }
             }
+
         }
         //prints the board once done
         //should update the gui so that the board is printed iwth 

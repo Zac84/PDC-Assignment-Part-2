@@ -208,6 +208,34 @@ public class PlaceBoatsFrame extends JFrame {
         System.out.println(this.orientationAndCoordinates);
     }
 
+    public String getCoordinates() {
+        
+        if (this.orientationAndCoordinates == null) {
+            return null;
+        }
+        System.out.println("went through, its " + orientationAndCoordinates);
+        String temp = "" + orientationAndCoordinates;
+        orientationAndCoordinates = null;
+        return temp;
+    }
+    
+
+//    public int[] getCoordinates() {
+//
+//        if(desiredXPos < 0 || desiredYPos < 0) {
+//            return null;
+//        }
+//        
+//        int[] temp = new int[2];
+//        temp[0] = desiredXPos;
+//        temp[1] = desiredYPos;
+//        
+//        desiredXPos = -1;
+//        desiredYPos = -1;
+//        
+//        return temp;
+//    }
+    
     public void showPopUpMessage(String title, String message) {
         JOptionPane.showMessageDialog(this, message, title, JOptionPane.PLAIN_MESSAGE);
     }
