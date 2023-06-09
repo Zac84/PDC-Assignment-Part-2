@@ -25,6 +25,7 @@ public class GameFrame extends JFrame {
     private JTextField boomPos;
     HashMap<String, String> map = new HashMap<String, String>();
     User user;
+    JLabel[] labels;
 
     public static void main(String[] args) {
         GameFrame frame = new GameFrame();
@@ -61,6 +62,30 @@ public class GameFrame extends JFrame {
         topJPanel.setLayout(new GridLayout(1, 2, 10, 0)); // 1 row, 2 columns, horizontal gap of 10 pixels
         Mainpanel.add(topJPanel, BorderLayout.NORTH);
 
+        //left grid layout manager
+        JPanel topLeftPanel = new JPanel();
+        topLeftPanel.setLayout(new BorderLayout());
+        topJPanel.add(topLeftPanel);
+
+        //top letters
+        JPanel topRowPanel1 = new JPanel();
+        topRowPanel1.setLayout(new GridLayout(1, 10));
+        topRowPanel1.setBackground(Color.white);
+        topLeftPanel.add(topRowPanel1, BorderLayout.NORTH);
+        for (char c = 'A'; c <= 'J'; c++) {
+            topRowPanel1.add(new JLabel(Character.toString(c), SwingConstants.CENTER));
+        }
+
+        //left numbers
+        JPanel leftColoumPanel1 = new JPanel();
+        leftColoumPanel1.setLayout(new GridLayout(10, 1));
+        leftColoumPanel1.setBackground(Color.WHITE);
+        topLeftPanel.add(leftColoumPanel1, BorderLayout.WEST);
+        for (int i = 1; i < 11; i++) {
+            leftColoumPanel1.add(new JLabel(i + "", SwingConstants.CENTER));
+        }
+        topLeftPanel.setPreferredSize(new Dimension(0, 50));
+
         //Panel for the first grid / board
         JPanel boardPanel1 = new JPanel();
         boardPanel1.setLayout(new GridLayout(10, 10));
@@ -71,7 +96,32 @@ public class GameFrame extends JFrame {
             }
         }
         this.setButtons(this.PlayerButtonGrid1.getButtons(), new BoardWrapper(10, 10, 1, " "));
-        topJPanel.add(boardPanel1);
+        topLeftPanel.add(boardPanel1, BorderLayout.CENTER);
+
+        //chanes
+        //right grid layout manager
+        JPanel topRightPanel = new JPanel();
+        topRightPanel.setLayout(new BorderLayout());
+        topJPanel.add(topRightPanel);
+
+        //top letters
+        JPanel topRowPanel2 = new JPanel();
+        topRowPanel2.setLayout(new GridLayout(1, 10));
+        topRowPanel2.setBackground(Color.white);
+        topRightPanel.add(topRowPanel2, BorderLayout.NORTH);
+        for (char c = 'A'; c <= 'J'; c++) {
+            topRowPanel2.add(new JLabel(Character.toString(c), SwingConstants.CENTER));
+        }
+
+        //left numbers
+        JPanel leftColoumPanel2 = new JPanel();
+        leftColoumPanel2.setLayout(new GridLayout(10, 1));
+        leftColoumPanel2.setBackground(Color.WHITE);
+        topRightPanel.add(leftColoumPanel2, BorderLayout.WEST);
+        for (int i = 1; i < 11; i++) {
+            leftColoumPanel2.add(new JLabel(i + "", SwingConstants.CENTER));
+        }
+        topRightPanel.setPreferredSize(new Dimension(0, 50));
 
         //Panel for the second grid / board
         JPanel boardPanel2 = new JPanel();
@@ -85,14 +135,15 @@ public class GameFrame extends JFrame {
             }
         }
         this.setButtons(this.PlayerButtonGrid2.getButtons(), new BoardWrapper(10, 10, 1, " "));
-        topJPanel.add(boardPanel2);
+        topRightPanel.add(boardPanel2, BorderLayout.CENTER);
 
+        //Everything above is just gui panel shit
         //bottom panel
         JPanel bottomPanel = new JPanel();
         Mainpanel.add(bottomPanel, BorderLayout.CENTER);
         bottomPanel.setLayout(null);
 
-        this.boomPos.setBounds(600, 80, 50, 50);
+        this.boomPos.setBounds(540, 80, 50, 50);
         this.boomPos.setHorizontalAlignment(JTextField.CENTER);
         bottomPanel.add(boomPos);
 
@@ -100,7 +151,7 @@ public class GameFrame extends JFrame {
         boomButton.setBackground(Color.red);
         boomButton.setForeground(Color.BLACK);
         boomButton.setText("BOOM");
-        boomButton.setBounds(650, 80, 100, 50);
+        boomButton.setBounds(600, 80, 150, 50);
         boomButton.setFocusable(false);
         bottomPanel.add(boomButton);
 
@@ -111,17 +162,31 @@ public class GameFrame extends JFrame {
 
         });
 
-//        JButton intructions = new JButton();
-//        intructions.addActionListener(e -> {
-//            this.intructionsMessage();
-//        });
-//
-//        intructions.setBounds(375, 35, 150, 40);
-//        intructions.setText("Instructions");
-//        intructions.setBackground(new Color(90, 163, 78));
-//        intructions.setForeground(Color.WHITE);
-//        intructions.setFocusable(false);
-//        bottomJPanel.add(intructions);
+        JButton intructions = new JButton();
+        intructions.addActionListener(e -> {
+            this.intructionsMessage();
+        });
+
+        intructions.setBounds(600, 20, 150, 50);
+        intructions.setText("Instructions");
+        intructions.setBackground(new Color(90, 163, 78));
+        intructions.setForeground(Color.WHITE);
+        intructions.setFocusable(false);
+        bottomPanel.add(intructions);
+
+        labels = new JLabel[3];
+        labels[0] = new JLabel("'s turn");
+        labels[1] = new JLabel("'s Board");
+        labels[2] = new JLabel("'s Board");
+
+        labels[0].setBounds(400, 100, 200, 50);
+        labels[1].setBounds(100, 10, 200, 25);
+        labels[2].setBounds(500, 10, 200, 25);
+        
+        bottomPanel.add(labels[0]);
+        bottomPanel.add(labels[1]);
+        bottomPanel.add(labels[2]);
+
         //panel sizes
         topJPanel.setPreferredSize(new Dimension(800, 400));
         bottomPanel.setPreferredSize(new Dimension(800, 160));
@@ -131,8 +196,18 @@ public class GameFrame extends JFrame {
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
+
+        this.intructionsMessage();
+
     }
 
+    public void updateLabels(String player1, String player2) {
+        this.labels[0].setText(player1 + "'s turn");
+        this.labels[1].setText(player1 + "'s Board");
+        this.labels[2].setText(player2 + "'s Board");
+        this.repaint();
+    }
+    
     public void setUser(User user) {
         this.user = user;
     }
@@ -188,7 +263,6 @@ public class GameFrame extends JFrame {
 
     //a method for re-enabling all the buttons
     public void changeEnabledState(boolean state) {
-        this.PlayerButtonGrid1.changeEnabledState(state);
         this.PlayerButtonGrid2.changeEnabledState(state);
     }
 
@@ -245,7 +319,6 @@ public class GameFrame extends JFrame {
         String[] coordinates = actionCommand.split("_");
         this.desiredXPos = Integer.parseInt(coordinates[0]);
         this.desiredYPos = Integer.parseInt(coordinates[1]);
-        this.PlayerButtonGrid1.changeEnabledState(false);
         this.PlayerButtonGrid2.changeEnabledState(false);
         System.out.println("Button clicked pos: " + this.desiredXPos + " " + this.desiredYPos);
     }
@@ -260,6 +333,13 @@ public class GameFrame extends JFrame {
 
     public void showPopUpMessage(String title, String message) {
         JOptionPane.showMessageDialog(this, message, title, JOptionPane.PLAIN_MESSAGE);
+    }
+
+    public void intructionsMessage() {
+        this.showPopUpMessage("Intructions", "Please press the square that you want to fire on, if the square turns red, its a hit, yellow is a miss"
+                + "\nif your carrier ship is alive you are able to use one large shot that covers a 3x3 area, to use that \nplease input a location 1 away from all the walls"
+                + "and in the form (letter number) e.g (a 1) and press \nBOOM!. Once all the oposing players ships have been sunk you will win!\n"
+                + "Have fun! :)");
     }
 
 }

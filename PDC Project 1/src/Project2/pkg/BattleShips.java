@@ -86,6 +86,7 @@ public class BattleShips {
 
             frame.updateButtons(tempPlayer1Board, tempPlayer1Board2);
             frame.changeEnabledState(true);
+            frame.updateLabels(player1.getUserName(), player2.getUserName());
             //makes the button disappear if they have used the button
             if (!Board.shotAvalible(player1)) {
                 frame.allowBoomButton(false);
@@ -96,6 +97,14 @@ public class BattleShips {
             //this needs it own method and classes
             while (desiredPos == null) {
                 desiredPos = frame.getCoordinates();
+                //CODE SMELLY
+                if (desiredPos != null) {
+                    if (tempPlayer1Board2.getBoardSpaceString(desiredPos[0], desiredPos[1]).equals("M") || tempPlayer1Board2.getBoardSpaceString(desiredPos[0], desiredPos[1]).equals("X")) {
+                        frame.showPopUpMessage("Incorrect", "Please pick a location you haven't already shot");
+                        frame.changeEnabledState(true);
+                        desiredPos = null;
+                    }
+                }
                 //stops it from continuing until courdinates are found.
             }
 
