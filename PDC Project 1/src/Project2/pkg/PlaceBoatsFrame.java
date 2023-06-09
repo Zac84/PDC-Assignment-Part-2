@@ -139,30 +139,47 @@ public class PlaceBoatsFrame extends JFrame {
 
     public boolean checkFields() {
         boolean temp = true;
-
+        
+        if(this.orientation.getText().length() != 1) {
+            this.orientation.setText("");
+            temp = false;
+        }
+        
+//        if(this.coordinates.getText().length() != 4){
+//            this.coordinates.setText("");
+//            temp = false;
+//        }
+        
         if (!this.correctCharacters(this.orientation.getText(), "n e s w")) {
             this.orientation.setText("");
             temp = false;
         }
 
+        System.out.println("got to the part above check coordinates");
         if (!this.checkCoordinates(this.coordinates.getText())) {
             this.coordinates.setText("");
             temp = false;
         }
-
+        System.out.println("got to the part after check coordinates");
+        
         return temp;
     }
 
     public boolean checkCoordinates(String input) {
+        if(input == null | !input.contains(" ")){
+            return false;
+        }
+        
         String[] coordinates = input.split(" ");
 
         if (!coordinates[0].matches("[a-jA-J]")) {
             return false;
         }
-
+        System.out.println("Letters passed");
         if (!coordinates[1].matches("[1-9]|10")) {
             return false;
         }
+        System.out.println("numbers passed");
         return true;
     }
 

@@ -175,11 +175,9 @@ public class BoardManager {
         //put frame in here and then only close when d is inputted.
         //will have to pass the frame into the manually place boats thing
 
-
         //reset the board
         //if you want you can add a reset button that just calls this
         //tempBoard.clear();
-
         //sends a frame so that, opening and closing can be controlled in here
         m1 = new ManuallyPlaceBoats(boats.getBoats(), tempBoard, user, frame);
         m1.placeBoats();
@@ -218,9 +216,8 @@ public class BoardManager {
         return won;
     }
 
+    //returns whether or not the carrier is alive
     public boolean carrierAlive(User user) {
-        //returns whether or not the carrier is alive
-        boolean isAlive = false;
 
         int counter = 0;
         BoardWrapper tempBoard;
@@ -228,29 +225,20 @@ public class BoardManager {
 
         for (int i = 0; i < 4; i++) {
             if (!(tempBoard.getBoardSpaceString(user.getCarrierLocationSpcae(counter++), user.getCarrierLocationSpcae(counter++)).equals("X"))) {
-                isAlive = true;
-                break;
+                return true;
             }
         }
 
-        return isAlive;
+        return false;
     }
 
     public boolean shotAvalible(User user) {
         //returns if they can use there shot or not
-        BoatListWrapper boats;
-        boats = user == Player1 ? p1Boats : p2Boats;
 
-        Carrier carrier = null;
+        Carrier carrier = this.getUserCarrier(user);
 
         if (!carrierAlive(user)) {
             return false;
-        }
-
-        for (Boat boat : boats.getBoats()) {
-            if (boat instanceof Carrier) {
-                carrier = (Carrier) boat;
-            }
         }
 
         if (!carrier.largeShotAvalible()) {
@@ -260,68 +248,72 @@ public class BoardManager {
         return true;
     }
 
-    //CLEANI THIS, USE THE ABOVE METHOD SHOTAVALIBLE AND IT WILL BE SO MUCH BETTER
-    public void useShot(int x, int y, User user) {
-        //uses the shot from the users board.
-
+    public Carrier getUserCarrier(User user) {
         BoatListWrapper boats;
         boats = user == Player1 ? p1Boats : p2Boats;
+
+        Carrier carrier = null;
+
+        for (Boat boat : boats.getBoats()) {
+            if (boat instanceof Carrier) {
+                carrier = (Carrier) boat;
+            }
+        }
+
+        return carrier;
+    }
+
+    //CLEANI THIS, USE THE ABOVE METHOD SHOTAVALIBLE AND IT WILL BE SO MUCH BETTER
+    public void useShot(int x, int y, User user) {
 
         //if the carrier is alive in the users board
         //finds the carrier in the boat list
         //checks to see if the big shot is avalible and if it is, uses it (changes it to false).
-        Boolean NotUsed = true;
-        if (carrierAlive(user)) {
-            for (Boat boat : boats.getBoats()) {
-                if (boat instanceof Carrier) {
-                    Carrier carrier = (Carrier) boat;
-                    if (carrier.largeShotAvalible()) {
-                        carrier.largeshot();
-                        BoardWrapper tempBoard; // the board that is being shot at
-                        BoardWrapper tempBoard2; // the board that is showing where u are shooting
+        x--;
+        y--;
+        Carrier carrier = this.getUserCarrier(user);
+        System.out.println("Use shot coordinates" + x + ", " + y);
 
-                        if (user == Player1) {
-                            tempBoard = Player2Board;
-                            tempBoard2 = Player1Board2;
-                        } else {
-                            tempBoard = Player1Board;
-                            tempBoard2 = Player2Board2;
-                        }
+        if (shotAvalible(user)) {
+            carrier.largeshot();
 
-                        //if the user is player 1, the board that is going to be shot at is player 2 board or vise versa.
-                        System.out.println("shots will always be entirly in the board, if you choose to shoot a boarding square it will aim at the inner square, doing the same or potentially more damage");
+            BoardWrapper tempBoard; // the board that is being shot at
+            BoardWrapper tempBoard2; // the board that is showing where u are shooting
 
-                        if (x == 0) {
-                            x++;
-                        } else if (x == coloum) {
-                            x--;
-                        }
+            //put into a method
+            if (user == Player1) {
+                tempBoard = Player2Board;
+                tempBoard2 = Player1Board2;
+            } else {
+                tempBoard = Player1Board;
+                tempBoard2 = Player2Board2;
+            }
 
-                        if (y == 0) {
-                            y++;
-                        } else if (y == row) {
-                            y--;
-                        }
+            if (x == 0) {
+                x++;
+            } else if (x == coloum-1) {
+                x--;
+            }
 
-                        //goes across a 3x3 space
-                        for (int i = (y - 1); i < (y + 2); i++) {
-                            for (int j = (x - 1); j < (x + 2); j++) {
-                                if (tempBoard.getBoardSpaceString(j, i).equals(tempBoard.getFiller())) {
-                                    tempBoard2.setSpace(j, i, "M");
-                                } else {
-                                    tempBoard.setSpace(j, i, "X");
-                                    tempBoard2.setSpace(j, i, "X");
-                                }
-                            }
-                        }
+            if (y == 0) {
+                y++;
+            } else if (y == row-1) {
+                y--;
+            }
+
+            //goes across a 3x3 space
+            System.out.println("shot was used");
+            for (int i = (y - 1); i < (y + 2); i++) {
+                for (int j = (x - 1); j < (x + 2); j++) {
+                    if (tempBoard.getBoardSpaceString(j, i).equals(tempBoard.getFiller())) {
+                        tempBoard2.setSpace(j, i, "M");
                     } else {
-                        System.out.println("Large shot has been used already :( ");
+                        tempBoard.setSpace(j, i, "X");
+                        tempBoard2.setSpace(j, i, "X");
                     }
-                    break;
                 }
             }
-        } else {
-            System.out.println("Carrier is not alive");
+
         }
 
     }

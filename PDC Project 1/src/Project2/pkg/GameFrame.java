@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import Project2.pkg.BoardWrapper;
 import java.awt.event.ActionEvent;
+import java.util.HashMap;
 
 /**
  *
@@ -15,14 +16,15 @@ import java.awt.event.ActionEvent;
  */
 public class GameFrame extends JFrame {
 
-    
-
-    
     JButtonWrapper PlayerButtonGrid1;//the button layout for home grid to display there own ships
     JButtonWrapper PlayerButtonGrid2;//the button board for the attacking grid to actually press buttons and stuff.
     private int desiredXPos;
     private int desiredYPos;
+    JButton boomButton;
+    private int shot;
     private JTextField boomPos;
+    HashMap<String, String> map = new HashMap<String, String>();
+    User user;
 
     public static void main(String[] args) {
         GameFrame frame = new GameFrame();
@@ -35,7 +37,19 @@ public class GameFrame extends JFrame {
         this.PlayerButtonGrid2 = new JButtonWrapper(new JButton[10][10]);
         desiredXPos = -1;
         desiredYPos = -1;
-        this.boomPos = new JTextField();
+        this.boomPos = new JTextField(3);
+        this.shot = 0;
+
+        map.put("A", "1");
+        map.put("B", "2");
+        map.put("C", "3");
+        map.put("D", "4");
+        map.put("E", "5");
+        map.put("F", "6");
+        map.put("G", "7");
+        map.put("H", "8");
+        map.put("I", "9");
+        map.put("J", "10");
 
         //main panel
         JPanel Mainpanel = new JPanel();
@@ -77,7 +91,12 @@ public class GameFrame extends JFrame {
         JPanel bottomPanel = new JPanel();
         Mainpanel.add(bottomPanel, BorderLayout.CENTER);
         bottomPanel.setLayout(null);
-        JButton boomButton = new JButton();
+
+        this.boomPos.setBounds(600, 80, 50, 50);
+        this.boomPos.setHorizontalAlignment(JTextField.CENTER);
+        bottomPanel.add(boomPos);
+
+        boomButton = new JButton();
         boomButton.setBackground(Color.red);
         boomButton.setForeground(Color.BLACK);
         boomButton.setText("BOOM");
@@ -88,8 +107,8 @@ public class GameFrame extends JFrame {
         boomButton.addActionListener(e -> {
             //do boom work
             this.boomButtonPress();
-            bottomPanel.remove(boomButton);
-            this.repaint();
+            System.out.println("boom pressed");
+
         });
 
 //        JButton intructions = new JButton();
@@ -114,10 +133,34 @@ public class GameFrame extends JFrame {
         this.setVisible(true);
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public void boomButtonPress() {
-        //needs to take input from the text box
-        //check the cooridnates 
-        //make boom work
+        String inputText = boomPos.getText();
+
+        if (!this.checkCoordinates(inputText)) {
+            return;
+        }
+        String[] arrayInput = inputText.split(" ");
+
+        this.desiredXPos = Integer.parseInt(map.get((arrayInput[0]).toUpperCase()));
+        this.desiredYPos = Integer.parseInt(arrayInput[1]);
+        this.shot = 1;
+    }
+
+    public boolean checkCoordinates(String input) {
+        String[] coordinates = input.split(" ");
+
+        if (!coordinates[0].matches("[a-jA-J]")) {
+            return false;
+        }
+
+        if (!coordinates[1].matches("[1-9]|10")) {
+            return false;
+        }
+        return true;
     }
 
     //a method for getting the current coordinates
@@ -127,13 +170,18 @@ public class GameFrame extends JFrame {
             return null;
         }
 
-        int[] temp = new int[2];
+        int[] temp = new int[3];
+
         temp[0] = desiredXPos;
         temp[1] = desiredYPos;
+        temp[2] = shot == 1 ? 1 : 0;
+        System.out.println("Desired when getCoordinates is called: " + temp[0] + ", " + temp[1]);
+        System.out.println("shot when getCoordinates is called: " + temp[2]);
 
         //this is to stop it from returning the last clicked coordinates
         desiredXPos = -1;
         desiredYPos = -1;
+        shot = 0;
 
         return temp;
     }
@@ -200,6 +248,18 @@ public class GameFrame extends JFrame {
         this.PlayerButtonGrid1.changeEnabledState(false);
         this.PlayerButtonGrid2.changeEnabledState(false);
         System.out.println("Button clicked pos: " + this.desiredXPos + " " + this.desiredYPos);
+    }
+
+    public void allowBoomButton(boolean allowed) {
+        this.boomButton.setEnabled(allowed);
+        this.boomButton.setVisible(allowed);
+        this.boomPos.setEnabled(allowed);
+        this.boomPos.setVisible(allowed);
+        this.repaint();
+    }
+
+    public void showPopUpMessage(String title, String message) {
+        JOptionPane.showMessageDialog(this, message, title, JOptionPane.PLAIN_MESSAGE);
     }
 
 }

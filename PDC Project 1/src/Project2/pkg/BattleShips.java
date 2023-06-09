@@ -40,7 +40,6 @@ public class BattleShips {
         Board.fillUsers(Board.Player2, TempInput);
 
 //        BFrame frame = new BFrame(Board.getPlayer1(), Board.getPlayer2());
-
         //Board manager place boats
         //see board manager placeBoats for TODO
         Board.placeBoats(Board.Player1);
@@ -56,7 +55,7 @@ public class BattleShips {
         //starts up the gui window
         GameFrame frame = new GameFrame();
         int[] desiredPos = null;
-        
+
         //temp References
         BoardWrapper tempPlayer1Board;
         BoardWrapper tempPlayer1Board2;
@@ -67,6 +66,7 @@ public class BattleShips {
         int counter = 2; // alternating for turns
         while (!won) {
 
+            //CODE SMELL FIX UP
             if (counter % 2 == 0) { //sets tempboard to the reference to the users board
                 player1 = Board.Player1;
                 player2 = Board.Player2;
@@ -86,30 +86,38 @@ public class BattleShips {
 
             frame.updateButtons(tempPlayer1Board, tempPlayer1Board2);
             frame.changeEnabledState(true);
+            //makes the button disappear if they have used the button
+            if (!Board.shotAvalible(player1)) {
+                frame.allowBoomButton(false);
+            } else {
+                frame.allowBoomButton(true);
+            }
 
-            //this needs to be chaned to something like GuiClass.Getcourdinates or something.
+            //this needs it own method and classes
             while (desiredPos == null) {
                 desiredPos = frame.getCoordinates();
                 //stops it from continuing until courdinates are found.
             }
 
-
             int desiredXPos = desiredPos[0];
             int desiredYPos = desiredPos[1];
 
             System.out.println("desired pos: " + desiredXPos + ", " + desiredYPos);
-            
-            //this normal stuff can happen and then it needs to be relayed to the gui
-            
-            //only display the gui element for the boom if its avalible.
-//            if(!Board.shotAvalible(player1)) {
-//                //if shot isn't avalible, dont show the button
-//                //implement
-//            }
-                
-                 
-            if (desiredPos.length == 3) {
-                Board.useShot(desiredXPos, desiredYPos, player1);
+            System.out.println("Desired pos2: " + desiredPos[2]);
+
+            //fix this shit up now that the boom button disapperas when you press it.
+            //CODE SMELL FIX UP
+            if (Board.shotAvalible(player1)) {
+                if (desiredPos[2] == 1) {
+                    Board.useShot(desiredXPos, desiredYPos, player1);
+                } else {
+                    if (tempPlayer2Board.getBoardSpaceString(desiredXPos, desiredYPos).equals(tempPlayer2Board.getFiller())) { //miss
+                        tempPlayer1Board2.setSpace(desiredXPos, desiredYPos, "M"); // sets shooting board space to M for miss
+                    } else if (tempPlayer2Board.getBoardSpaceString(desiredXPos, desiredYPos).equals("O")) { //HIT
+                        tempPlayer1Board2.setSpace(desiredXPos, desiredYPos, "X"); // Sets X on both player 1s shooting screen and player 2's board
+                        tempPlayer2Board.setSpace(desiredXPos, desiredYPos, "X");
+                    }
+                }
             } else {
                 if (tempPlayer2Board.getBoardSpaceString(desiredXPos, desiredYPos).equals(tempPlayer2Board.getFiller())) { //miss
                     tempPlayer1Board2.setSpace(desiredXPos, desiredYPos, "M"); // sets shooting board space to M for miss
@@ -134,18 +142,21 @@ public class BattleShips {
             printer.Clear();
 
             if (Board.checkWin(player1.getID())) {
-                System.out.println(player1.getUserName() + " Has one! Congratulations!");
-                System.out.println(player1.getUserName() + " Has " + Board.fm.addWin(player1) + " Wins!");
+                frame.showPopUpMessage("", player1.getUserName() + " Has one! Congratulations!\n" + player1.getUserName() + " Has " + Board.fm.addWin(player1) + " Wins!");
+                System.out.println();
                 won = true;
             } else if (Board.checkWin(player2.getID())) {
-                System.out.println(player2.getUserName() + " Has one! Congratulations!");
-                System.out.println(player2.getUserName() + " Has " + Board.fm.addWin(player2) + " Wins!");
+                frame.showPopUpMessage("", player1.getUserName() + " Has one! Congratulations!\n" + player2.getUserName() + " Has " + Board.fm.addWin(player2) + " Wins!");
                 won = true;
             } else {
                 counter++;
             }
         }
-
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+        }
+        frame.dispose();
     }
 
 }
