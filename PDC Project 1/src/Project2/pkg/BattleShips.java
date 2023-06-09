@@ -54,9 +54,9 @@ public class BattleShips {
                 + "\nM are misses\n\n");
 
         //starts up the gui window
-        GameFrame frame = new GameFrame(Board.getPlayer1(), Board.getPlayer2());
+        GameFrame frame = new GameFrame();
         int[] desiredPos = null;
-
+        
         //temp References
         BoardWrapper tempPlayer1Board;
         BoardWrapper tempPlayer1Board2;
@@ -102,10 +102,10 @@ public class BattleShips {
             //this normal stuff can happen and then it needs to be relayed to the gui
             
             //only display the gui element for the boom if its avalible.
-            if(!Board.shotAvalible(player1)) {
-                //if shot isn't avalible, dont show the button
-                //implement
-            }
+//            if(!Board.shotAvalible(player1)) {
+//                //if shot isn't avalible, dont show the button
+//                //implement
+//            }
                 
                  
             if (desiredPos.length == 3) {

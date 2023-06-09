@@ -4,20 +4,10 @@
  */
 package Project2.pkg;
 
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.BorderFactory;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.border.BevelBorder;
-import Project2.pkg.BoardManager;
 import Project2.pkg.BoardWrapper;
+import java.awt.event.ActionEvent;
 
 /**
  *
@@ -25,38 +15,34 @@ import Project2.pkg.BoardWrapper;
  */
 public class GameFrame extends JFrame {
 
-    //the button layout for home grid to display there own ships
-    JButtonWrapper PlayerButtonGrid1;
+    
 
-    //the button board for the attacking grid to actually press buttons and stuff.
-    JButtonWrapper PlayerButtonGrid2;
-
-
+    
+    JButtonWrapper PlayerButtonGrid1;//the button layout for home grid to display there own ships
+    JButtonWrapper PlayerButtonGrid2;//the button board for the attacking grid to actually press buttons and stuff.
     private int desiredXPos;
     private int desiredYPos;
+    private JTextField boomPos;
 
-    /*
-    TODO
-    Make everything work with the gui stuff at first without changing any of the actual stuff
-    Seperate stuff into classes and make them all that dandy shit
-    Add derby support to the login stuff
-    make the actual shooting part of the game work with gui - DONE
-    clean up the shooting part of the gui
-     */
     public static void main(String[] args) {
-//        BFrame frame = new BFrame();
+        GameFrame frame = new GameFrame();
     }
 
-    public GameFrame(User player1, User player2) {
+    public GameFrame() {
 
-        //this can be changed sorta thing
-        this.PlayerButtonGrid1 = new JButtonWrapper(new JButton[10][10], player1.getID());
-        this.PlayerButtonGrid2 = new JButtonWrapper(new JButton[10][10], player1.getID());
+        //doesn't need to be a jbutton wrapper i dont think
+        this.PlayerButtonGrid1 = new JButtonWrapper(new JButton[10][10]);
+        this.PlayerButtonGrid2 = new JButtonWrapper(new JButton[10][10]);
+        desiredXPos = -1;
+        desiredYPos = -1;
+        this.boomPos = new JTextField();
 
+        //main panel
         JPanel Mainpanel = new JPanel();
         Mainpanel.setLayout(new BorderLayout());
         this.getContentPane().add(Mainpanel);
 
+        //top panel
         JPanel topJPanel = new JPanel();
         topJPanel.setLayout(new GridLayout(1, 2, 10, 0)); // 1 row, 2 columns, horizontal gap of 10 pixels
         Mainpanel.add(topJPanel, BorderLayout.NORTH);
@@ -73,6 +59,7 @@ public class GameFrame extends JFrame {
         this.setButtons(this.PlayerButtonGrid1.getButtons(), new BoardWrapper(10, 10, 1, " "));
         topJPanel.add(boardPanel1);
 
+        //Panel for the second grid / board
         JPanel boardPanel2 = new JPanel();
         boardPanel2.setLayout(new GridLayout(10, 10));
         //add stuff to panel
@@ -86,38 +73,68 @@ public class GameFrame extends JFrame {
         this.setButtons(this.PlayerButtonGrid2.getButtons(), new BoardWrapper(10, 10, 1, " "));
         topJPanel.add(boardPanel2);
 
+        //bottom panel
         JPanel bottomPanel = new JPanel();
-//        bottomPanel.setBackground(Color.orange);
         Mainpanel.add(bottomPanel, BorderLayout.CENTER);
+        bottomPanel.setLayout(null);
+        JButton boomButton = new JButton();
+        boomButton.setBackground(Color.red);
+        boomButton.setForeground(Color.BLACK);
+        boomButton.setText("BOOM");
+        boomButton.setBounds(650, 80, 100, 50);
+        boomButton.setFocusable(false);
+        bottomPanel.add(boomButton);
 
+        boomButton.addActionListener(e -> {
+            //do boom work
+            this.boomButtonPress();
+            bottomPanel.remove(boomButton);
+            this.repaint();
+        });
+
+//        JButton intructions = new JButton();
+//        intructions.addActionListener(e -> {
+//            this.intructionsMessage();
+//        });
+//
+//        intructions.setBounds(375, 35, 150, 40);
+//        intructions.setText("Instructions");
+//        intructions.setBackground(new Color(90, 163, 78));
+//        intructions.setForeground(Color.WHITE);
+//        intructions.setFocusable(false);
+//        bottomJPanel.add(intructions);
+        //panel sizes
         topJPanel.setPreferredSize(new Dimension(800, 400));
-        bottomPanel.setPreferredSize(new Dimension(400, 150));
+        bottomPanel.setPreferredSize(new Dimension(800, 160));
 
-        desiredXPos = -1;
-        desiredYPos = -1;
-        
         this.pack();
-        this.setSize(800, 800);
+        this.setSize(800, 600);
+        this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
+    }
 
+    public void boomButtonPress() {
+        //needs to take input from the text box
+        //check the cooridnates 
+        //make boom work
     }
 
     //a method for getting the current coordinates
     public int[] getCoordinates() {
         //this is to stop it from returning the last clicked coordinates
-        if(desiredXPos < 0 || desiredYPos < 0) {
+        if (desiredXPos < 0 || desiredYPos < 0) {
             return null;
         }
-        
+
         int[] temp = new int[2];
         temp[0] = desiredXPos;
         temp[1] = desiredYPos;
-        
+
         //this is to stop it from returning the last clicked coordinates
         desiredXPos = -1;
         desiredYPos = -1;
-        
+
         return temp;
     }
 
@@ -185,21 +202,6 @@ public class GameFrame extends JFrame {
         System.out.println("Button clicked pos: " + this.desiredXPos + " " + this.desiredYPos);
     }
 
-//    @Override
-//    public void actionPerformed(ActionEvent e) {
-//        if (e.getSource() == button) {
-//            System.out.println("worked");
-//            button.setEnabled(false);
-//            label.setVisible(true);
-//        }
-//    }
-    //this works but isn't really useful
-//                    button.addMouseListener(new MouseAdapter() {
-//                    @Override
-//                    public void mouseClicked(MouseEvent E) {
-//                        System.out.println("ButtonPressed");
-//                    }
-//                });
 }
 
 //        label = new JLabel("Click");

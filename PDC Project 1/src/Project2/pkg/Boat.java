@@ -66,6 +66,11 @@ public abstract class Boat {
         this.orientaion = orientaion;
     }
 
+    public void setLocation (String orientation, int x, int y) {
+        this.orientaion = orientation;
+        this.xPostion = x;
+        this.yPostion = y;
+    }
     
     
 }

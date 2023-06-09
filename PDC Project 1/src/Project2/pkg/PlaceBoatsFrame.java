@@ -44,7 +44,6 @@ public class PlaceBoatsFrame extends JFrame {
         topJPanel.setLayout(new GridLayout(1, 11)); //1x10 grid 
         topJPanel.setBackground(Color.WHITE);
         mainJPanel.add(topJPanel, BorderLayout.NORTH);
-        //TODO needs to be filled with pictures of letters hopefully or labels
         topJPanel.add(new JLabel(""));
         for (char c = 'A'; c <= 'J'; c++) {
             topJPanel.add(new JLabel(Character.toString(c), SwingConstants.CENTER));
@@ -55,7 +54,6 @@ public class PlaceBoatsFrame extends JFrame {
         leftJPanel.setLayout(new GridLayout(10, 1)); //10x1 grid 
         leftJPanel.setBackground(Color.WHITE);
         mainJPanel.add(leftJPanel, BorderLayout.WEST);
-        //TODO needs to be filled with pictures of numbers hopefully or labels
         for (int i = 1; i < 11; i++) {
             leftJPanel.add(new JLabel(i + "", SwingConstants.CENTER));
         }
@@ -70,7 +68,6 @@ public class PlaceBoatsFrame extends JFrame {
                 centrePanel.add(this.buttonGrid[j][i]);
             }
         }
-        //needs to be filled with buttons
 
         //bottom panel
         JPanel bottomJPanel = new JPanel();
@@ -124,18 +121,6 @@ public class PlaceBoatsFrame extends JFrame {
         });
         bottomJPanel.add(place);
 
-        /*
-        TODO
-        Needs a button for instructions that opens pop up DONE
-        A label with the current Player name
-        A label with the current boat name
-        A label with current boat length
-        A method that updates all the labels
-        A text input box with orientaion
-        A text input box with coordinates
-        A button to place, which deletes the stuff for the text box's and put the ships on the board, should also make sure that the coordinates are correct
-        A button for done which should just set that value to d
-         */
         topJPanel.setPreferredSize(new Dimension(750, 50));
         leftJPanel.setPreferredSize(new Dimension(50, 600));
         bottomJPanel.setPreferredSize(new Dimension(575, 200));

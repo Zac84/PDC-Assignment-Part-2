@@ -46,27 +46,11 @@ public class ManuallyPlaceBoats {
 
     public void placeBoats() {
 
-        InputChecker IC = new InputChecker();
-
-        String[] placement = null;
         String gotCoords = null;
-        String desiredOrientation = "";
-        String[] desiredPos;
+        String desiredOrientation;
 
-        //needs to be GUI labels 
-        //could be GUI class method that is something like manuallyPlaceBoats and has these in the labels
-//        System.out.println("To place a boat, select a orientation (N, E, S, W), this is the direction the boat will face");
-//        System.out.println(" and pick the coridinates x,y in the form (letter number)");
         for (Boat boat : Boats) {
-
-            printer.printBoard(board.getBoard(), board.getRow(), board.getColoum());
-
             frame.setLabels(user.getUserName(), boat.getName(), boat.getInitialSize() + "");
-
-            //this needs to be an input box of somesort that could be done with a GuiClass.getOrientation
-//            desiredOrientation = IC.check("N E S W , n e s w", true);
-//            //get the coordinates like the shooting thing - see battleships main method
-//            desiredPos = IC.checkCoordinates().split(" ");
             boolean correctPos = false;
 
             while (!correctPos) {
@@ -74,36 +58,27 @@ public class ManuallyPlaceBoats {
                 while (gotCoords == null) {
                     gotCoords = frame.getCoordinates();
                 }
-                placement = gotCoords.split(" ");
-
+                
+                String[] placement = gotCoords.split(" ");
                 desiredOrientation = placement[0];
+
                 int desiredXPos = (Integer.parseInt(map.get(placement[1].toUpperCase())) - 1);
                 int desiredYPos = (Integer.parseInt(placement[2]) - 1);
 
                 colisions.setNewInfo(board, desiredOrientation, desiredXPos, desiredYPos, boat.getInitialSize());
                 if (colisions.doesntColideWith()) {
-                    boat.setxPostion(desiredXPos);
-                    boat.setyPostion(desiredYPos);
-                    boat.setOrientaion(desiredOrientation);
+                    boat.setLocation(desiredOrientation, desiredXPos, desiredYPos);
                     //draw onto board
                     this.drawOntoBoard(boat);
                     //updated the board here
                     frame.updateButtons();
                     correctPos = true;
                 } else {
-                    //on the last one, it breaks and goes through anyway
-                    //needs to be a text box thing in the GUI like GuiClass.sendTextBox("HFJHAHFSAUH");
                     frame.showPopUpMessage("", "Please make sure boat doesn't go out of boundys and has a 1 pixel radius of free space");
-                    System.out.println("Please make sure boat doesn't go out of boundys and has a 1 pixel radius of free space");
                 }
-                placement = null;
                 gotCoords = null;
             }
-
         }
-        //prints the board once done
-        //should update the gui so that the board is printed iwth 
-//        printer.printBoard(board.getBoard(), board.getRow(), board.getColoum());
     }
 
     public void drawOntoBoard(Boat boat) {
