@@ -16,17 +16,14 @@ public class PlaceBoatsFrame extends JFrame {
     JButton[][] buttonGrid;
     BoardWrapper Board;
     JLabel[] labels;
-    private JTextField orientation;
-    private JTextField coordinates;
+    private final JTextField orientation;
+    private final JTextField coordinates;
     private String orientationAndCoordinates;
 
-    public static void main(String[] args) {
-        PlaceBoatsFrame frame = new PlaceBoatsFrame();
-    }
-
+//    public static void main(String[] args) {
+//        PlaceBoatsFrame frame = new PlaceBoatsFrame();
+//    }
     public PlaceBoatsFrame() {
-
-        this.intructionsMessage();
 
         this.Board = new BoardWrapper(10, 10, -1, " ");
         this.buttonGrid = new JButton[10][10];
@@ -45,7 +42,7 @@ public class PlaceBoatsFrame extends JFrame {
         //top panel
         JPanel topJPanel = new JPanel();
         topJPanel.setLayout(new GridLayout(1, 11)); //1x10 grid 
-        topJPanel.setBackground(Color.red);
+        topJPanel.setBackground(Color.WHITE);
         mainJPanel.add(topJPanel, BorderLayout.NORTH);
         //TODO needs to be filled with pictures of letters hopefully or labels
         topJPanel.add(new JLabel(""));
@@ -56,7 +53,7 @@ public class PlaceBoatsFrame extends JFrame {
         //left panel
         JPanel leftJPanel = new JPanel();
         leftJPanel.setLayout(new GridLayout(10, 1)); //10x1 grid 
-        leftJPanel.setBackground(Color.green);
+        leftJPanel.setBackground(Color.WHITE);
         mainJPanel.add(leftJPanel, BorderLayout.WEST);
         //TODO needs to be filled with pictures of numbers hopefully or labels
         for (int i = 1; i < 11; i++) {
@@ -149,55 +146,56 @@ public class PlaceBoatsFrame extends JFrame {
         this.setResizable(false);
         this.setSize(575, 800);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setAlwaysOnTop(true);
         this.setVisible(true);
+        this.intructionsMessage();
+        this.setAlwaysOnTop(false);
     }
 
     public boolean checkFields() {
         boolean temp = true;
-        
-        if (!this.correctCharacters(this.orientation.getText(), "n e s w")){
+
+        if (!this.correctCharacters(this.orientation.getText(), "n e s w")) {
             this.orientation.setText("");
             temp = false;
         }
-        
-        if(!this.checkCoordinates(this.coordinates.getText())) {
+
+        if (!this.checkCoordinates(this.coordinates.getText())) {
             this.coordinates.setText("");
             temp = false;
         }
-        
+
         return temp;
     }
 
     public boolean checkCoordinates(String input) {
         String[] coordinates = input.split(" ");
-        
-        
-        if(!coordinates[0].matches("[a-jA-J]")) {
+
+        if (!coordinates[0].matches("[a-jA-J]")) {
             return false;
         }
-        
-        
-        if(!coordinates[1].matches("[1-9]|10")) {
+
+        if (!coordinates[1].matches("[1-9]|10")) {
             return false;
         }
         return true;
     }
-    
+
     //should be in another class but here for now
-    public boolean correctCharacters (String input, String correctCharacters) {
+    public boolean correctCharacters(String input, String correctCharacters) {
         String[] chars = correctCharacters.split(" ");
-        
-        if(input.length() != chars[0].length()) { //if the length of the input isn't the same as the desired lenght
+
+        if (input.length() != chars[0].length()) { //if the length of the input isn't the same as the desired lenght
             return false; //return false
         }
-        
-        if(!correctCharacters.toUpperCase().contains(input.toUpperCase())){
+
+        if (!correctCharacters.toUpperCase().contains(input.toUpperCase())) {
             return false;
         }
-        
+
         return true;
     }
-    
+
     public void takeTextFields() {
         String input1 = orientation.getText();
         String input2 = coordinates.getText();
@@ -209,7 +207,7 @@ public class PlaceBoatsFrame extends JFrame {
     }
 
     public String getCoordinates() {
-        
+
         if (this.orientationAndCoordinates == null) {
             return null;
         }
@@ -218,24 +216,7 @@ public class PlaceBoatsFrame extends JFrame {
         orientationAndCoordinates = null;
         return temp;
     }
-    
 
-//    public int[] getCoordinates() {
-//
-//        if(desiredXPos < 0 || desiredYPos < 0) {
-//            return null;
-//        }
-//        
-//        int[] temp = new int[2];
-//        temp[0] = desiredXPos;
-//        temp[1] = desiredYPos;
-//        
-//        desiredXPos = -1;
-//        desiredYPos = -1;
-//        
-//        return temp;
-//    }
-    
     public void showPopUpMessage(String title, String message) {
         JOptionPane.showMessageDialog(this, message, title, JOptionPane.PLAIN_MESSAGE);
     }

@@ -67,17 +67,16 @@ public class ManuallyPlaceBoats {
 //            desiredOrientation = IC.check("N E S W , n e s w", true);
 //            //get the coordinates like the shooting thing - see battleships main method
 //            desiredPos = IC.checkCoordinates().split(" ");
-            while (gotCoords == null) {
-                gotCoords = frame.getCoordinates();
-            }
-            placement = gotCoords.split(" ");
-
-            System.out.println("got out");
-            desiredOrientation = placement[0];
-
             boolean correctPos = false;
 
             while (!correctPos) {
+
+                while (gotCoords == null) {
+                    gotCoords = frame.getCoordinates();
+                }
+                placement = gotCoords.split(" ");
+
+                desiredOrientation = placement[0];
                 int desiredXPos = (Integer.parseInt(map.get(placement[1].toUpperCase())) - 1);
                 int desiredYPos = (Integer.parseInt(placement[2]) - 1);
 
@@ -90,17 +89,15 @@ public class ManuallyPlaceBoats {
                     this.drawOntoBoard(boat);
                     //updated the board here
                     frame.updateButtons();
-                    placement = null;
                     correctPos = true;
                 } else {
                     //on the last one, it breaks and goes through anyway
                     //needs to be a text box thing in the GUI like GuiClass.sendTextBox("HFJHAHFSAUH");
                     frame.showPopUpMessage("", "Please make sure boat doesn't go out of boundys and has a 1 pixel radius of free space");
                     System.out.println("Please make sure boat doesn't go out of boundys and has a 1 pixel radius of free space");
-
-                    //needs to be guied
-                    desiredPos = IC.checkCoordinates().split(" ");
                 }
+                placement = null;
+                gotCoords = null;
             }
 
         }
