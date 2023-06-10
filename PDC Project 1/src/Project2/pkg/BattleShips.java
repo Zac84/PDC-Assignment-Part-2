@@ -30,6 +30,17 @@ public class BattleShips {
         //prints the log in screen.
         //change this from checking if they want to login or create a new and just ask them to insert a username
         //if there is file with that username it can use the file management log in and if not it can use create new
+        
+        LoginFrame login = new LoginFrame();
+        
+        String[] usernames;
+        
+        while(!login.getButtonPressed()) { 
+            usernames = login.getUsernames();
+        }
+        
+        login.dispose();
+        
         printer.LogInScreen(Board.Player1, Board.Player2);
         System.out.println("Player 1: (L / C) ");
         TempInput = IC.check("L C , l c", true);
@@ -39,9 +50,8 @@ public class BattleShips {
         TempInput = IC.check("L C , l c", true);
         Board.fillUsers(Board.Player2, TempInput);
 
-//        BFrame frame = new BFrame(Board.getPlayer1(), Board.getPlayer2());
         //Board manager place boats
-        //see board manager placeBoats for TODO
+        //GUI elements and l
         Board.placeBoats(Board.Player1);
         printer.Clear();
         Board.placeBoats(Board.Player2);

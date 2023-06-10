@@ -27,6 +27,7 @@ public class BoardManager {
     FileManagment fm = new FileManagment();
     PrinterClass printer = new PrinterClass();
     InputChecker IC = new InputChecker();
+    DataBaseInteraction DB = new DataBaseInteraction();
 
     //each user has their own boat list.
     BoatListWrapper p1Boats;
