@@ -7,7 +7,7 @@ package Project2.pkg;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
-import javafx.print.Printer;
+//import javafx.print.Printer;
 
 /**
  *
@@ -27,7 +27,7 @@ public class BoardManager {
     FileManagment fm = new FileManagment();
     PrinterClass printer = new PrinterClass();
     InputChecker IC = new InputChecker();
-    DataBaseInteraction DB = new DataBaseInteraction();
+    DataBaseInteraction DB = new DataBaseInteraction("pdc");
 
     //each user has their own boat list.
     BoatListWrapper p1Boats;
@@ -67,33 +67,43 @@ public class BoardManager {
 
     public void fillUsers(User user, String TempInput) {
 
-        Scanner scan = new Scanner(System.in);
-
-        switch (TempInput) {
-            case "L":
-            case "l":
-                System.out.println("Please enter your username");
-                if (user == this.Player2) { //only happens for user 2 because of the order.
-                    TempInput = IC.notTheSameUser(Player1.getUserName());
-                } else {
-                    TempInput = scan.nextLine();
-                }
-                fm.logIn(user, TempInput);
-                TempInput = "";
-                break;
-            case "C":
-            case "c":
-                System.out.println("Please enter your username");
-                TempInput = scan.nextLine();
-                fm.createNew(TempInput, user);
-                TempInput = "";
-                break;
-            default:
-                throw new AssertionError();
-        }
-
+//        Scanner scan = new Scanner(System.in);
+        
+        UserManagement um = new UserManagement(user, TempInput, DB.getConnection(), DB.getTableName());
+        um.login();
+        DB.viewAllData();
+        
+        
+//        System.out.println("User ID before logging in " + user.getID());
+//
+//        switch (TempInput) {
+//            case "L":
+//            case "l":
+//                System.out.println("Please enter your username");
+//                if (user == this.Player2) { //only happens for user 2 because of the order.
+//                    TempInput = IC.notTheSameUser(Player1.getUserName());
+//                } else {
+//                    TempInput = scan.nextLine();
+//                }
+//                fm.logIn(user, TempInput);
+//                TempInput = "";
+//                break;
+//            case "C":
+//            case "c":
+//                System.out.println("Please enter your username");
+//                TempInput = scan.nextLine();
+//                fm.createNew(TempInput, user);
+//                TempInput = "";
+//                break;
+//            default:
+//                throw new AssertionError();
+//        }
+//
+//        System.out.println("User ID after logging in " + user.getID());
+        
         //if the user is player 1, sets there boards id to the player 1's ID
         //if the user is player 2, sets there boards id to the player 2's iD
+        //DON'T KNOW IF THIS IS GONNA WORK
         if (user.getID() == this.Player1.getID()) {
             this.Player1Board.setPlayerID(this.Player1.getID());
             this.Player1Board2.setPlayerID(this.Player1.getID());

@@ -6,6 +6,8 @@ package Project2.pkg;
 
 import com.sun.xml.internal.bind.v2.runtime.output.SAXOutput;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -30,25 +32,31 @@ public class BattleShips {
         //prints the log in screen.
         //change this from checking if they want to login or create a new and just ask them to insert a username
         //if there is file with that username it can use the file management log in and if not it can use create new
-        
         LoginFrame login = new LoginFrame();
-        
-        String[] usernames;
-        
-        while(!login.getButtonPressed()) { 
-            usernames = login.getUsernames();
-        }
-        
-        login.dispose();
-        
-        printer.LogInScreen(Board.Player1, Board.Player2);
-        System.out.println("Player 1: (L / C) ");
-        TempInput = IC.check("L C , l c", true);
-        Board.fillUsers(Board.Player1, TempInput);
 
-        System.out.println("Player 2: (L / C)");
-        TempInput = IC.check("L C , l c", true);
-        Board.fillUsers(Board.Player2, TempInput);
+        String[] usernames = null;
+
+        while (!login.getButtonPressed()) {
+        }
+
+        usernames = login.getUsernames();
+
+        login.dispose();
+
+//        printer.LogInScreen(Board.Player1, Board.Player2);
+//        System.out.println("Player 1: (L / C) ");
+//        TempInput = IC.check("L C , l c", true);
+//        Board.fillUsers(Board.Player1, TempInput);
+        Board.fillUsers(Board.Player1, usernames[0]);
+//        sends the user name and user
+//
+//        System.out.println("Player 2: (L / C)");
+//        TempInput = IC.check("L C , l c", true);
+//        Board.fillUsers(Board.Player2, TempInput);
+        Board.fillUsers(Board.Player2, usernames[1]);
+
+        System.out.println(Board.Player1);
+        System.out.println(Board.Player2);
 
         //Board manager place boats
         //GUI elements and l
@@ -115,7 +123,12 @@ public class BattleShips {
                         desiredPos = null;
                     }
                 }
-                //stops it from continuing until courdinates are found.
+                try {
+                    Thread.sleep(10);
+                    //stops it from continuing until courdinates are found.
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(BattleShips.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
             int desiredXPos = desiredPos[0];
@@ -161,16 +174,21 @@ public class BattleShips {
             printer.Clear();
 
             if (Board.checkWin(player1.getID())) {
-                frame.showPopUpMessage("", player1.getUserName() + " Has one! Congratulations!\n" + player1.getUserName() + " Has " + Board.fm.addWin(player1) + " Wins!");
+                UserManagement um = new UserManagement(player1, player1.getUserName(), Board.DB.getConnection(), "pdc");
+                um.increaseWins(player1);
+                frame.showPopUpMessage("", player1.getUserName() + " Has one! Congratulations!\n" + player1.getUserName() + " Has " + player1.getNumberOfWins() + " Wins!");
                 System.out.println();
                 won = true;
             } else if (Board.checkWin(player2.getID())) {
-                frame.showPopUpMessage("", player1.getUserName() + " Has one! Congratulations!\n" + player2.getUserName() + " Has " + Board.fm.addWin(player2) + " Wins!");
+                UserManagement um = new UserManagement(player1, player1.getUserName(), Board.DB.getConnection(), "pdc");
+                um.increaseWins(player1);
+                frame.showPopUpMessage("", player1.getUserName() + " Has one! Congratulations!\n" + player2.getUserName() + " Has " + player2.getNumberOfWins() + " Wins!");
                 won = true;
             } else {
                 counter++;
             }
         }
+        Board.DB.closeConnections();
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {

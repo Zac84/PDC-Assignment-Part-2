@@ -36,6 +36,10 @@ public class User {
         this.numberOfWins = numberOfWins;
     }
 
+    public int getNumberOfWins () {
+        return this.numberOfWins;
+    }
+    
     public int getID() {
         return ID;
     }
@@ -58,6 +62,10 @@ public class User {
 
     public int getCarrierLocationSpcae(int pos) {
         return carrierLocation[pos];
+    }
+    
+    public String toString () {
+        return this.ID + " " + this.UserName + " " + this.numberOfWins;
     }
     
 }

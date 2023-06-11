@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Connection;
 
 /**
  *
@@ -32,8 +33,9 @@ public class LoginFrame extends JFrame {
 
     }
 
+    //Connection con
     public LoginFrame() {
-        
+
         label = new JTextArea();
         label.setEditable(false);
 //        label.setLineWrap(true);
@@ -93,24 +95,36 @@ public class LoginFrame extends JFrame {
         this.username2 = username2Input.getText();
         System.out.println(this.username1);
         System.out.println(this.username2);
-        this.buttonPressed = true;
+        
+        //needs to check that it isn't already a row with the same username.
+        
+        if (username1.length() >= 1 && username2.length() >= 1) {
+            this.buttonPressed = true;
+        } else {
+            this.showPopUpMessage("Error", "Please input usernames first");
+        }
     }
 
     public void showPopUpMessage(String title, String message) {
         JOptionPane.showMessageDialog(this, message, title, JOptionPane.PLAIN_MESSAGE);
     }
 
-    public boolean getButtonPressed () {
+    public boolean getButtonPressed() {
+        //needs to be there otherwise it breaks
+        try {
+            Thread.sleep(10);
+        } catch (Exception e) {
+        }
         return this.buttonPressed;
     }
-    
+
     public String[] getUsernames() {
         if (!buttonPressed) {
             return null;
         }
-
-        String[] usernames = {this.username1, this.username2};
         
+        String[] usernames = {this.username1, this.username2};
+
         return usernames;
     }
 

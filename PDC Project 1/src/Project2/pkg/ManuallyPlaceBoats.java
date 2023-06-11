@@ -8,6 +8,8 @@ import com.sun.xml.internal.bind.v2.runtime.output.SAXOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -57,6 +59,11 @@ public class ManuallyPlaceBoats {
 
                 while (gotCoords == null) {
                     gotCoords = frame.getCoordinates();
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(ManuallyPlaceBoats.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
                 
                 String[] placement = gotCoords.split(" ");
