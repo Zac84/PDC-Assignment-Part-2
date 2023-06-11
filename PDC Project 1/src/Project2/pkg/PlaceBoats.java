@@ -10,14 +10,15 @@ package Project2.pkg;
  */
 public class PlaceBoats {
 
-    
+    ManuallyPlaceBoats m1;
+    BoardManager board;
     
     public PlaceBoats() {
-
     }
 
-    public void placeBoats(User user) {
+    public void placeBoats(User user, BoardManager board) {
         PlaceBoatsFrame frame = new PlaceBoatsFrame();
+        this.board = board;
         this.placeBoats(user, frame);
         frame.dispose();
 
@@ -31,24 +32,18 @@ public class PlaceBoats {
         BoatListWrapper boats;
 
         //the user is directly inputted this can be cleaned up
-        if (Player1Board.getPlayerID() == user.getID()) { //sets tempboard to the reference to the users board
-            tempBoard = Player1Board;
-            tempBoard3 = Player1Board3;
-            boats = p1Boats;
+        if (board.Player1Board.getPlayerID() == user.getID()) { //sets tempboard to the reference to the users board
+            tempBoard = board.Player1Board;
+            tempBoard3 = board.Player1Board3;
+            boats = board.p1Boats;
         } else {
-            tempBoard = Player2Board;
-            tempBoard3 = Player2Board3;
-            boats = p2Boats;
+            tempBoard = board.Player2Board;
+            tempBoard3 = board.Player2Board3;
+            boats = board.p2Boats;
         }
 
         frame.setBoard(tempBoard);
-        //put frame in here and then only close when d is inputted.
-        //will have to pass the frame into the manually place boats thing
 
-        //reset the board
-        //if you want you can add a reset button that just calls this
-        //tempBoard.clear();
-        //sends a frame so that, opening and closing can be controlled in here
         m1 = new ManuallyPlaceBoats(boats.getBoats(), tempBoard, user, frame);
         m1.placeBoats();
 

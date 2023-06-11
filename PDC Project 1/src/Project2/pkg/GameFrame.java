@@ -27,10 +27,6 @@ public class GameFrame extends JFrame {
     User user;
     JLabel[] labels;
 
-    public static void main(String[] args) {
-        GameFrame frame = new GameFrame();
-    }
-
     public GameFrame() {
 
         //doesn't need to be a jbutton wrapper i dont think
@@ -220,14 +216,14 @@ public class GameFrame extends JFrame {
         }
         String[] arrayInput = inputText.split(" ");
 
-        this.desiredXPos = Integer.parseInt(map.get((arrayInput[0]).toUpperCase()));
-        this.desiredYPos = Integer.parseInt(arrayInput[1]);
+        this.desiredXPos = Integer.parseInt(map.get((arrayInput[0]).toUpperCase()))-1;
+        this.desiredYPos = Integer.parseInt(arrayInput[1])-1;
         this.shot = 1;
     }
 
     public boolean checkCoordinates(String input) {
         String[] coordinates = input.split(" ");
-
+        
         if (!coordinates[0].matches("[a-jA-J]")) {
             return false;
         }

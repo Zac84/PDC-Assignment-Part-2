@@ -31,16 +31,7 @@ public class DataBaseInteraction {
 //        this.viewAllTables();
 //        this.closeConnections();
     }
-
-    public static void main(String[] args) {
-        DataBaseInteraction dbm = new DataBaseInteraction("pdc");
-//        UserManagement um = new UserManagement(new User(), "Mike", this.getConnection(), "");
-        UserManagement userManager = new UserManagement(new User(), "MIKE", dbm.getConnection(), "pdc");
-        userManager.login();
-//        System.out.println(userManager.getRow("MIKE"));
-
-    }
-
+    
     //to establish connection with embeded database
     public void establishConnection() {
         if (this.con == null) {

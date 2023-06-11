@@ -47,9 +47,6 @@ public class BattleShips {
 
         Board.fillUsers(Board.Player2, usernames[1]);
 
-        System.out.println(Board.Player1);
-        System.out.println(Board.Player2);
-
         Board.placeBoats(Board.Player1);
 
         Board.placeBoats(Board.Player2);
@@ -67,7 +64,6 @@ public class BattleShips {
         int counter = 2; // alternating for turns
         while (!won) {
 
-            //CODE SMELL FIX UP
             if (counter % 2 == 0) { //sets tempboard to the reference to the users board
                 player1 = Board.Player1;
                 player2 = Board.Player2;
@@ -98,7 +94,7 @@ public class BattleShips {
                 desiredPos = frame.getCoordinates();
                 //CODE SMELLY
                 if (desiredPos != null) {
-                    if (tempPlayer1Board2.notFillerOrShip(desiredPos[0], desiredPos[1]) || tempPlayer1Board2.notFillerOrShip(desiredPos[0], desiredPos[1])) {
+                    if (!tempPlayer1Board2.notFillerOrShip(desiredPos[0], desiredPos[1]) || !tempPlayer1Board2.notFillerOrShip(desiredPos[0], desiredPos[1])) {
                         frame.showPopUpMessage("Incorrect", "Please pick a location you haven't already shot");
                         frame.changeEnabledState(true);
                         desiredPos = null;

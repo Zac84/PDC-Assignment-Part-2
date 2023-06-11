@@ -21,7 +21,8 @@ public class BoardManager {
     User Player1;
     User Player2;
 
-    ManuallyPlaceBoats m1;
+//    ManuallyPlaceBoats m1;
+    PlaceBoats pb;
     DataBaseInteraction DB = new DataBaseInteraction("pdc");
 
     //each user has their own boat list.
@@ -32,6 +33,7 @@ public class BoardManager {
     //first board is the board they place their own ships on
     //second board is when they fire at the other players board
     //thrid board is a copy of the first board once all the ships are placed down and is used to check wins
+    
     BoardWrapper Player1Board;
     BoardWrapper Player1Board2;
     BoardWrapper Player1Board3;
@@ -116,54 +118,10 @@ public class BoardManager {
     }
 
     public void placeBoats(User user) {
-        //make the other place boats private 
-
-        //pull up the gui window that has the stuff and use it to input this stuff?
-        //pulls up the gui with the user and then closes it once its finished.
-        PlaceBoatsFrame frame = new PlaceBoatsFrame();
-        this.placeBoats(user.getID(), user, frame);
-        frame.dispose();
-
-        //close frame
+        pb = new PlaceBoats();
+        pb.placeBoats(user, this);
     }
 
-    //returns true if boats have been succesfully placed
-    public void placeBoats(int ID, User user, PlaceBoatsFrame frame) {
-        BoardWrapper tempBoard;
-        BoardWrapper tempBoard3;
-        BoatListWrapper boats;
-
-        //the user is directly inputted this can be cleaned up
-        if (Player1Board.getPlayerID() == ID) { //sets tempboard to the reference to the users board
-            tempBoard = Player1Board;
-            tempBoard3 = Player1Board3;
-            boats = p1Boats;
-        } else {
-            tempBoard = Player2Board;
-            tempBoard3 = Player2Board3;
-            boats = p2Boats;
-        }
-
-        frame.setBoard(tempBoard);
-        //put frame in here and then only close when d is inputted.
-        //will have to pass the frame into the manually place boats thing
-
-        //reset the board
-        //if you want you can add a reset button that just calls this
-        //tempBoard.clear();
-        //sends a frame so that, opening and closing can be controlled in here
-        m1 = new ManuallyPlaceBoats(boats.getBoats(), tempBoard, user, frame);
-        m1.placeBoats();
-
-        //copys it into board 3
-        for (int i = 0; i < tempBoard3.getRow(); i++) {
-            for (int j = 0; j < tempBoard3.getColoum(); j++) {
-                tempBoard3.setSpace(i, j, tempBoard.getBoardSpaceString(i, j));
-            }
-        }
-    }
-
-    //checks if this ID has won
     public boolean checkWin(int ID) {
         boolean won = true;
 
@@ -222,6 +180,7 @@ public class BoardManager {
     }
 
     public Carrier getUserCarrier(User user) {
+        //returns the carrier
         BoatListWrapper boats;
         boats = user == Player1 ? p1Boats : p2Boats;
 
@@ -236,16 +195,9 @@ public class BoardManager {
         return carrier;
     }
 
-    //CLEANI THIS, USE THE ABOVE METHOD SHOTAVALIBLE AND IT WILL BE SO MUCH BETTER
     public void useShot(int x, int y, User user) {
 
-        //if the carrier is alive in the users board
-        //finds the carrier in the boat list
-        //checks to see if the big shot is avalible and if it is, uses it (changes it to false).
-        x--;
-        y--;
         Carrier carrier = this.getUserCarrier(user);
-        System.out.println("Use shot coordinates" + x + ", " + y);
 
         if (shotAvalible(user)) {
             carrier.largeshot();
@@ -253,7 +205,6 @@ public class BoardManager {
             BoardWrapper tempBoard; // the board that is being shot at
             BoardWrapper tempBoard2; // the board that is showing where u are shooting
 
-            //put into a method
             if (user == Player1) {
                 tempBoard = Player2Board;
                 tempBoard2 = Player1Board2;
@@ -275,7 +226,6 @@ public class BoardManager {
             }
 
             //goes across a 3x3 space
-            System.out.println("shot was used");
             for (int i = (y - 1); i < (y + 2); i++) {
                 for (int j = (x - 1); j < (x + 2); j++) {
                     if (tempBoard.getBoardSpaceString(j, i).equals(tempBoard.getFiller())) {

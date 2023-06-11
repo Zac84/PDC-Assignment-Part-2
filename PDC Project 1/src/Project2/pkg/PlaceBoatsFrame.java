@@ -20,14 +20,10 @@ public class PlaceBoatsFrame extends JFrame {
     private final JTextField coordinates;
     private String orientationAndCoordinates;
 
-//    public static void main(String[] args) {
-//        PlaceBoatsFrame frame = new PlaceBoatsFrame();
-//    }
     public PlaceBoatsFrame() {
 
         this.Board = new BoardWrapper(10, 10, -1, " ");
         this.buttonGrid = new JButton[10][10];
-//        this.Board = board;
 
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -112,6 +108,7 @@ public class PlaceBoatsFrame extends JFrame {
         place.setBackground(Color.white);
         place.setFocusable(false);
         place.setText("PLACE");
+        
         place.addActionListener(e -> {
             if (checkFields()) {
                 this.takeTextFields();
@@ -119,6 +116,7 @@ public class PlaceBoatsFrame extends JFrame {
                 this.showPopUpMessage("Incorrect", "Please make sure you input the correct fields");
             }
         });
+        
         bottomJPanel.add(place);
 
         topJPanel.setPreferredSize(new Dimension(750, 50));
@@ -145,11 +143,6 @@ public class PlaceBoatsFrame extends JFrame {
             temp = false;
         }
         
-//        if(this.coordinates.getText().length() != 4){
-//            this.coordinates.setText("");
-//            temp = false;
-//        }
-        
         if (!this.correctCharacters(this.orientation.getText(), "n e s w")) {
             this.orientation.setText("");
             temp = false;
@@ -166,12 +159,16 @@ public class PlaceBoatsFrame extends JFrame {
     }
 
     public boolean checkCoordinates(String input) {
-        if(input == null | !input.contains(" ")){
+        if(input == null || !input.contains(" ")){
+            return false;
+        }
+
+        String[] coordinates = input.split(" ");
+        
+        if(coordinates.length != 2) {
             return false;
         }
         
-        String[] coordinates = input.split(" ");
-
         if (!coordinates[0].matches("[a-jA-J]")) {
             return false;
         }
@@ -183,7 +180,6 @@ public class PlaceBoatsFrame extends JFrame {
         return true;
     }
 
-    //should be in another class but here for now
     public boolean correctCharacters(String input, String correctCharacters) {
         String[] chars = correctCharacters.split(" ");
 

@@ -28,11 +28,6 @@ public class LoginFrame extends JFrame {
 
     private boolean buttonPressed = false;
 
-    public static void main(String[] args) {
-        new LoginFrame();
-
-    }
-
     //Connection con
     public LoginFrame() {
 

@@ -99,7 +99,7 @@ public class ManuallyPlaceBoats {
 
             board.setSpace(tempX, tempY, boat.visual[i]);
 
-            if (boat.getName() == "Carrier") {
+            if (boat.getName().equals("Carrier")) {
                 user.setCarrierLocation(carrierCounter++, tempX);
                 user.setCarrierLocation(carrierCounter++, tempY);
             }
