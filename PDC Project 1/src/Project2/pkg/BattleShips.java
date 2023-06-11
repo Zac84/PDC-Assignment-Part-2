@@ -43,34 +43,17 @@ public class BattleShips {
 
         login.dispose();
 
-//        printer.LogInScreen(Board.Player1, Board.Player2);
-//        System.out.println("Player 1: (L / C) ");
-//        TempInput = IC.check("L C , l c", true);
-//        Board.fillUsers(Board.Player1, TempInput);
         Board.fillUsers(Board.Player1, usernames[0]);
-//        sends the user name and user
-//
-//        System.out.println("Player 2: (L / C)");
-//        TempInput = IC.check("L C , l c", true);
-//        Board.fillUsers(Board.Player2, TempInput);
+
         Board.fillUsers(Board.Player2, usernames[1]);
 
         System.out.println(Board.Player1);
         System.out.println(Board.Player2);
 
-        //Board manager place boats
-        //GUI elements and l
         Board.placeBoats(Board.Player1);
-        printer.Clear();
+
         Board.placeBoats(Board.Player2);
-
-        printer.Clear();
-        System.out.println("Key:"
-                + "\nO segments are alive boat segments"
-                + "\nX are hit boat segments"
-                + "\nM are misses\n\n");
-
-        //starts up the gui window
+        
         GameFrame frame = new GameFrame();
         int[] desiredPos = null;
 
@@ -99,14 +82,12 @@ public class BattleShips {
                 tempPlayer2Board = Board.Player1Board;
             }
 
-            printer.printDoubleBoard(tempPlayer1Board, tempPlayer1Board2, player1.getUserName(), player2.getUserName());
-            printer.shootingScreen(player1.getUserName());
-
             frame.updateButtons(tempPlayer1Board, tempPlayer1Board2);
             frame.changeEnabledState(true);
             frame.updateLabels(player1.getUserName(), player2.getUserName());
+            
             //makes the button disappear if they have used the button
-            if (!Board.shotAvalible(player1)) {
+            if (!Board.shotAvalible(player1)) { //if board isn't avalible don't show boom button
                 frame.allowBoomButton(false);
             } else {
                 frame.allowBoomButton(true);
@@ -117,32 +98,29 @@ public class BattleShips {
                 desiredPos = frame.getCoordinates();
                 //CODE SMELLY
                 if (desiredPos != null) {
-                    if (tempPlayer1Board2.getBoardSpaceString(desiredPos[0], desiredPos[1]).equals("M") || tempPlayer1Board2.getBoardSpaceString(desiredPos[0], desiredPos[1]).equals("X")) {
+                    if (tempPlayer1Board2.notFillerOrShip(desiredPos[0], desiredPos[1]) || tempPlayer1Board2.notFillerOrShip(desiredPos[0], desiredPos[1])) {
                         frame.showPopUpMessage("Incorrect", "Please pick a location you haven't already shot");
                         frame.changeEnabledState(true);
                         desiredPos = null;
                     }
                 }
+                //this is because the while loop is too fast for the program to keep up with
                 try {
                     Thread.sleep(10);
-                    //stops it from continuing until courdinates are found.
                 } catch (InterruptedException ex) {
                     Logger.getLogger(BattleShips.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
+            //takes coordinates
             int desiredXPos = desiredPos[0];
             int desiredYPos = desiredPos[1];
 
-            System.out.println("desired pos: " + desiredXPos + ", " + desiredYPos);
-            System.out.println("Desired pos2: " + desiredPos[2]);
-
-            //fix this shit up now that the boom button disapperas when you press it.
             //CODE SMELL FIX UP
-            if (Board.shotAvalible(player1)) {
-                if (desiredPos[2] == 1) {
-                    Board.useShot(desiredXPos, desiredYPos, player1);
-                } else {
+            if (Board.shotAvalible(player1)) { //if the shot is avalible
+                if (desiredPos[2] == 1) { //if they use the shot
+                    Board.useShot(desiredXPos, desiredYPos, player1); //use shot
+                } else { //if they don't use the shot, just shoot normally
                     if (tempPlayer2Board.getBoardSpaceString(desiredXPos, desiredYPos).equals(tempPlayer2Board.getFiller())) { //miss
                         tempPlayer1Board2.setSpace(desiredXPos, desiredYPos, "M"); // sets shooting board space to M for miss
                     } else if (tempPlayer2Board.getBoardSpaceString(desiredXPos, desiredYPos).equals("O")) { //HIT
@@ -150,7 +128,7 @@ public class BattleShips {
                         tempPlayer2Board.setSpace(desiredXPos, desiredYPos, "X");
                     }
                 }
-            } else {
+            } else { //if they don't have the shot avalible, shoot normally.
                 if (tempPlayer2Board.getBoardSpaceString(desiredXPos, desiredYPos).equals(tempPlayer2Board.getFiller())) { //miss
                     tempPlayer1Board2.setSpace(desiredXPos, desiredYPos, "M"); // sets shooting board space to M for miss
                 } else if (tempPlayer2Board.getBoardSpaceString(desiredXPos, desiredYPos).equals("O")) { //HIT
@@ -162,17 +140,17 @@ public class BattleShips {
             //reset desiredPos so that it doesn't break
             desiredPos = null;
 
-            //should update the gui afterwards
-            //should pass in the tempPlayer1Board for printing there there own board
-            //should pass in the tempPlayer1Board2 for printing the board they are attacking
+            //displays the new information in the gui
             frame.updateButtons(tempPlayer1Board, tempPlayer1Board2);
+            
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
+                
             }
 
-            printer.Clear();
 
+            //to check if they have won or not
             if (Board.checkWin(player1.getID())) {
                 UserManagement um = new UserManagement(player1, player1.getUserName(), Board.DB.getConnection(), "pdc");
                 um.increaseWins(player1);

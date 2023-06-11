@@ -50,6 +50,12 @@ public class UserManagement {
     public void setCredintials() {
 
         String[] userRow = this.getRow(Username).split(" ");
+        
+        if(userRow.length < 3 || userRow == null) {
+            System.out.println("failed");
+            return;
+        }
+        
         user.logIn(userRow[1], Integer.parseInt(userRow[0]), Integer.parseInt(userRow[2]));
     }
 

@@ -20,7 +20,7 @@ public class ManuallyPlaceBoats {
 
     ArrayList<Boat> Boats;
     BoardWrapper board;
-    PrinterClass printer = new PrinterClass();
+//    PrinterClass printer = new PrinterClass();
     Colisions colisions = new Colisions();
     User user;
     HashMap<String, String> map = new HashMap<String, String>();
@@ -65,7 +65,7 @@ public class ManuallyPlaceBoats {
                         Logger.getLogger(ManuallyPlaceBoats.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                
+
                 String[] placement = gotCoords.split(" ");
                 desiredOrientation = placement[0];
 
@@ -90,32 +90,13 @@ public class ManuallyPlaceBoats {
 
     public void drawOntoBoard(Boat boat) {
 
-        int tempX = boat.getXPostion();
-        int tempY = boat.getYPostion();
         int carrierCounter = 0;
 
         for (int i = 0; i < boat.getInitialSize(); i++) {
 
-            switch (boat.getOrientaion()) {
-                case "n":
-                case "N":
-                    tempY = boat.getYPostion() - i;
-                    break;
-                case "e":
-                case "E":
-                    tempX = boat.getXPostion() + i;
-                    break;
-                case "s":
-                case "S":
-                    tempY = boat.getYPostion() + i;
-                    break;
-                case "w":
-                case "W":
-                    tempX = boat.getXPostion() - i;
-                    break;
-                default:
-                    throw new AssertionError();
-            }
+            int tempX = boat.calculateNewXPos(i);
+            int tempY = boat.calculateNewYPos(i);
+
             board.setSpace(tempX, tempY, boat.visual[i]);
 
             if (boat.getName() == "Carrier") {

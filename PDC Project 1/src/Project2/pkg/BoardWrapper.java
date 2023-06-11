@@ -39,6 +39,18 @@ public class BoardWrapper {
         }
     }
 
+    public boolean notFillerOrShip (int x, int y) {
+        if(this.getBoardSpaceString(x, y).equals("M")) {
+           return false; 
+        }
+        
+        if(this.getBoardSpaceString(x, y).equals("O")) {
+            return false;
+        }
+        
+        return true;
+    } 
+    
     public void setSpace(int x, int y, String replacement) {
         this.board[x][y] = replacement;
     }

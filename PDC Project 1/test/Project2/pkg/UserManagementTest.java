@@ -16,22 +16,22 @@ import static org.junit.Assert.*;
  * @author zdtuc
  */
 public class UserManagementTest {
-    
+
     DataBaseInteraction db;
     User user;
     UserManagement um;
-    
+
     public UserManagementTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
         this.db = new DataBaseInteraction("pdc");
@@ -39,7 +39,7 @@ public class UserManagementTest {
         user = new User();
         um = new UserManagement(user, "testUser", db.getConnection(), db.getTableName());
     }
-    
+
     @After
     public void tearDown() {
         this.db.deleteTable("pdc");
@@ -72,9 +72,12 @@ public class UserManagementTest {
     public void testSetCredintials() {
         System.out.println("setCredintials");
         UserManagement instance = um;
-        instance.setCredintials();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        instance.setNewCredintials(); //set credintials is in the setNewCredintials method.
+        boolean worked = false;
+        if (um.user.getID() + "" != null && um.user.getUserName() != null) {
+            worked = true;
+        }
+        assertTrue(worked);
     }
 
     /**
@@ -83,10 +86,13 @@ public class UserManagementTest {
     @Test
     public void testSetNewCredintials() {
         System.out.println("setNewCredintials");
-        UserManagement instance = new UserManagement();
+        UserManagement instance = um;
         instance.setNewCredintials();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        boolean worked = false;
+        if (um.user.getID() + "" != null && um.user.getUserName() != null) {
+            worked = true;
+        }
+        assertTrue(worked);
     }
 
     /**
@@ -95,13 +101,12 @@ public class UserManagementTest {
     @Test
     public void testRowExists() {
         System.out.println("rowExists");
-        String username = "";
-        UserManagement instance = new UserManagement();
+        UserManagement instance = um;
+        instance.setNewCredintials(); //set credintials is in the setNewCredintials method.
+
         boolean expResult = false;
-        boolean result = instance.rowExists(username);
+        boolean result = instance.rowExists("NotAUser");
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -110,13 +115,12 @@ public class UserManagementTest {
     @Test
     public void testGetRow() {
         System.out.println("getRow");
-        String username = "";
-        UserManagement instance = new UserManagement();
-        String expResult = "";
+        String username = "testUser";
+        um.setNewCredintials();
+        UserManagement instance = um;
+        String expResult = um.user.getID() + " " + username + " " + um.user.getNumberOfWins();
         String result = instance.getRow(username);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
-    
+
 }
