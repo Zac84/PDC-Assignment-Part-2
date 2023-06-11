@@ -39,7 +39,8 @@ public class BoardWrapper {
         }
     }
 
-    public boolean notFillerOrShip (int x, int y) {
+    //returns true if inputted pos is not occupied by ship or miss
+    public boolean notMissOrShip (int x, int y) {
         if(this.getBoardSpaceString(x, y).equals("M")) {
            return false; 
         }

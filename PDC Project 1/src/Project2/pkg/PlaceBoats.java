@@ -21,8 +21,6 @@ public class PlaceBoats {
         this.board = board;
         this.placeBoats(user, frame);
         frame.dispose();
-
-        //close frame
     }
 
     //returns true if boats have been succesfully placed

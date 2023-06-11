@@ -133,7 +133,6 @@ public class GameFrame extends JFrame {
         this.setButtons(this.PlayerButtonGrid2.getButtons(), new BoardWrapper(10, 10, 1, " "));
         topRightPanel.add(boardPanel2, BorderLayout.CENTER);
 
-        //Everything above is just gui panel shit
         //bottom panel
         JPanel bottomPanel = new JPanel();
         Mainpanel.add(bottomPanel, BorderLayout.CENTER);
@@ -339,18 +338,3 @@ public class GameFrame extends JFrame {
     }
 
 }
-
-//        label = new JLabel("Click");
-//        label.setBounds(500, 500, 100, 50);
-//        label.setVisible(false);
-//        button = new JButton();
-//        //the reason its 650 is because you have to take into account the heigh and width of the actual button so its just the place you want - the size
-//        button.setBounds(500, 550, 100, 50); // the location and size can be set like this 
-//        button.addActionListener(this);
-//        //e -> System.out.println("Worked")
-//        button.setText("FIRE");
-//        button.setFocusable(false);
-////        button.setIcon(icon);//can be used to put image on button
-//        button.setBackground(Color.red);
-//        button.setForeground(Color.BLACK);//changes colour of text
-////        button.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED)); //borders 

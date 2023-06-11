@@ -15,7 +15,6 @@ public class User {
     private int ID = 0;
     private String UserName;
     private int numberOfWins = 0;
-    //records the postion of the carrier
     public int[] carrierLocation = new int[8];
     
     public User() {
@@ -29,8 +28,6 @@ public class User {
         this.setID(id);
         this.setNumberOfWins(numberOfWins);
     }
-    
-    //add in file management the win count, idk what to do, falling asleep.*
 
     public void setNumberOfWins(int numberOfWins) {
         this.numberOfWins = numberOfWins;

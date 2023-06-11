@@ -21,7 +21,6 @@ public class BoardManager {
     User Player1;
     User Player2;
 
-//    ManuallyPlaceBoats m1;
     PlaceBoats pb;
     DataBaseInteraction DB = new DataBaseInteraction("pdc");
 
@@ -41,10 +40,7 @@ public class BoardManager {
     BoardWrapper Player2Board;
     BoardWrapper Player2Board2;
     BoardWrapper Player2Board3;
-    //put into wrapper classes so that they can be assosiated with a player.
 
-    //this board will not include any of the other board stuff, it will simply be a normal 2d array with only the locations
-    //this will be eaiser to manage and work around, after computations are done, the print class will take care of printing the whole board.
     public BoardManager() {
 
         //a user is created and then a board is created and assigned to the player
@@ -239,21 +235,6 @@ public class BoardManager {
 
         }
 
-    }
-
-    //returns true if the board has any boats on it.
-    private boolean hasBoats(BoardWrapper board) {
-        boolean hasBoats = false;
-
-        for (int i = 0; i < board.getRow(); i++) {
-            for (int j = 0; j < board.getColoum(); j++) {
-                if (!board.getBoardSpaceString(j, i).equals(board.getFiller())) {
-                    return true;
-                }
-            }
-        }
-
-        return hasBoats;
     }
 
 }

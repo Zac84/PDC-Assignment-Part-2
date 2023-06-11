@@ -16,22 +16,13 @@ import java.util.logging.Logger;
 public class BattleShips {
 
     public static void main(String[] args) {
-        PrinterClass printer = new PrinterClass();
         BoardManager Board = new BoardManager();
-        InputChecker IC = new InputChecker();
 
         Scanner scan = new Scanner(System.in);
 
         String TempInput = "";
         boolean won = false;
-
-        //TODO Replace with gui title screen
-        printer.printTitleScreen();
-
-        //TODO replace this stuff with gui and derby version
-        //prints the log in screen.
-        //change this from checking if they want to login or create a new and just ask them to insert a username
-        //if there is file with that username it can use the file management log in and if not it can use create new
+        
         LoginFrame login = new LoginFrame();
 
         String[] usernames = null;
@@ -89,12 +80,10 @@ public class BattleShips {
                 frame.allowBoomButton(true);
             }
 
-            //this needs it own method and classes
             while (desiredPos == null) {
                 desiredPos = frame.getCoordinates();
-                //CODE SMELLY
                 if (desiredPos != null) {
-                    if (!tempPlayer1Board2.notFillerOrShip(desiredPos[0], desiredPos[1]) || !tempPlayer1Board2.notFillerOrShip(desiredPos[0], desiredPos[1])) {
+                    if (!tempPlayer1Board2.notMissOrShip(desiredPos[0], desiredPos[1]) || !tempPlayer1Board2.notMissOrShip(desiredPos[0], desiredPos[1])) {
                         frame.showPopUpMessage("Incorrect", "Please pick a location you haven't already shot");
                         frame.changeEnabledState(true);
                         desiredPos = null;
@@ -112,7 +101,6 @@ public class BattleShips {
             int desiredXPos = desiredPos[0];
             int desiredYPos = desiredPos[1];
 
-            //CODE SMELL FIX UP
             if (Board.shotAvalible(player1)) { //if the shot is avalible
                 if (desiredPos[2] == 1) { //if they use the shot
                     Board.useShot(desiredXPos, desiredYPos, player1); //use shot

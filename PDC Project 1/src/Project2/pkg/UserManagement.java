@@ -28,10 +28,6 @@ public class UserManagement {
         this.tableName = tableName;
     }
 
-    UserManagement() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
     public void login() {
         //check if user exists
 
@@ -51,7 +47,7 @@ public class UserManagement {
 
         String[] userRow = this.getRow(Username).split(" ");
         
-        if(userRow.length < 3 || userRow == null) {
+        if(userRow == null || userRow.length < 3) {
             System.out.println("failed");
             return;
         }
@@ -101,7 +97,7 @@ public class UserManagement {
                 }
             }
         } catch (SQLException ex) {
-            System.out.println("Broke" + ex.getMessage());
+            System.out.println("Broke " + ex.getMessage());
         }
 
         return row;

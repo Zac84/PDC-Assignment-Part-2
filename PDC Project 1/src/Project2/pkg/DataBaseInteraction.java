@@ -24,12 +24,8 @@ public class DataBaseInteraction {
     public DataBaseInteraction(String tableName) {
         this.tableName = tableName;
         this.establishConnection();
-//        this.deleteTable(tableName);
         this.tableInitializer();
-//        this.addRow();
         this.viewAllData();
-//        this.viewAllTables();
-//        this.closeConnections();
     }
     
     //to establish connection with embeded database
@@ -37,7 +33,6 @@ public class DataBaseInteraction {
         if (this.con == null) {
             try {
                 con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-//                System.out.println("Connected: " + con);
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }

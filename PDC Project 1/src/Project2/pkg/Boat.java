@@ -20,7 +20,6 @@ public abstract class Boat {
     private int xPostion;
     private int yPostion;
     //orientation only be set to Either N,E,S,W that represet north, east, south and west.
-//    private String orientaion;
     public Orientation orientaionReal;
     private static final HashMap<String, Orientation> orientationMap = createOrientationMap();
 
@@ -67,10 +66,6 @@ public abstract class Boat {
     public int getYPostion() {
         return yPostion;
     }
-
-//    public String getOrientaion() {
-//        return orientaion;
-//    }
     
     public String[] getVisual() {
         return visual;
